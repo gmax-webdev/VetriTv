@@ -1,13 +1,40 @@
-/* src/app/globals.css */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Global grid wrapper */
+.home-wrapper {
+  padding: 20px;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #fff;
-  color: #000;
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* Desktop 3-column layout */
+@media screen and (min-width: 1024px) {
+  .grid-layout {
+    grid-template-columns: 2fr 1.5fr 1fr;
+  }
+}
+
+/* Tablet 2-column layout */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .grid-layout {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .right-column {
+    display: none;
+  }
+}
+
+/* Mobile: single column */
+@media screen and (max-width: 767px) {
+  .grid-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .right-column,
+  .center-column {
+    display: none;
+  }
 }

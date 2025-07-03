@@ -1,11 +1,10 @@
-// src/app/layout.tsx
-import '../globals.css'; // ✅ Fixed path
+import '../globals.css';
 import Navbar from '../components/Navbar/Navbar';
-import type { Metadata } from 'next';
+import SubNavbar from '../components/SubNavbar/SubNavbar';
 
-export const metadata: Metadata = {
-  title: 'Vetri TV',
-  description: 'News from Tamil Nadu and beyond',
+export const metadata = {
+  title: 'VetriTv',
+  description: 'Latest trusted news',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -13,6 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <Navbar />
+        {/* <SubNavbar /> */}
         {children}
       </body>
     </html>

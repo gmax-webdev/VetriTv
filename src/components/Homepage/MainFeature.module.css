@@ -1,0 +1,28 @@
+.mainFeature {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mainFeature img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.textContent {
+  position: relative;
+}
+
+.highlight {
+  width: 45px;
+  height: 8px;
+  background-color: orange;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.textContent h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
