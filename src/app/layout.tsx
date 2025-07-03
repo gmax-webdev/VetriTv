@@ -1,6 +1,14 @@
 import '../globals.css';
 import Navbar from '../components/Navbar/Navbar';
-import SubNavbar from '../components/SubNavbar/SubNavbar';
+import Header from '@/components/Navbar/Header';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Poppins } from 'next/font/google';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'VetriTv',
@@ -9,10 +17,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={poppins.className}>
       <body>
+        <Header/>
         <Navbar />
-        {/* <SubNavbar /> */}
         {children}
       </body>
     </html>

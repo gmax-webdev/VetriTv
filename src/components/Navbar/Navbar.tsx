@@ -1,32 +1,69 @@
-// src/components/Navbar/Navbar.tsx
 'use client';
 
+import React, { useState } from 'react';
+import './Navbar.css';
 import Link from 'next/link';
-import Image from 'next/image';
-import styles from './Navbar.module.css';
-import SubNavbar from '../SubNavbar/SubNavbar';
 
-const Navbar = () => {
+const navItems = [
+  { label: 'Home', href: '#' },
+  { label: 'Latest News', href: '#' },
+  { label: 'Main News', href: '#' },
+  {
+    label: 'More',
+    href: '#',
+    dropdown: [
+      'World',
+      'Sports',
+      'Political',
+      'World Political',
+      'Local',
+      'Education',
+      'Science',
+      'Technology',
+      'Cinema',
+    ],
+  },
+];
+
+const Navbar: React.FC = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
-    <>
-      <nav className={styles.navbar}>
-        <div className={styles.logo}>
-          <Link href="/">
-            <Image src="/Assets/VLogo.png" alt="Vetri Tv" width={400} height={250} />
-          </Link>
+    <header className="navbar">
+      <div className="navbar-container">
+        <nav className={`navbar-links ${mobileMenuOpen ? 'active' : ''}`}>
+          {navItems.map((item) => (
+            <div key={item.label} className="nav-item">
+              <Link href={item.href} className="nav-link">
+                {item.label}
+              </Link>
+              {item.dropdown && (
+                <div className="dropdown">
+                  {item.dropdown.map((sub) => (
+                    <Link key={sub} href="#" className="dropdown-link">
+                      {sub}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </nav>
+
+        <div className="navbar-controls">
+          <button className="live-btn">LIVE</button>
         </div>
-        <ul className={styles.navLinks}>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/news">News</Link></li>
-          <li><Link href="/india">India</Link></li>
-          <li><Link href="/world">World</Link></li>
-          <li><Link href="/sports">Sports</Link></li>
-          <li><Link href="/business">Business</Link></li>
-          <li><Link href="/tech">Tech</Link></li>
-        </ul>
-      </nav>
-      <SubNavbar />
-    </>
+
+        <div
+          className={`hamburger ${mobileMenuOpen ? 'open' : ''}`}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          <span />
+          <span />
+          <span />
+        </div>
+      </div>
+    </header>
   );
 };
 
