@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar/Navbar';
 import Header from '@/components/Navbar/Header';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Poppins } from 'next/font/google';
+import Footer from '@/components/Footer/Footer';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header/>
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
