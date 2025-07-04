@@ -49,7 +49,7 @@
 }
 
 .footer-section a:hover {
-  color: #900f0f; /* maroon hover */
+  color: #106b01; /* maroon hover */
 }
 
 /* Right side: Logo + Icons */
@@ -87,7 +87,7 @@
 }
 
 .social-icons a:hover {
-  background-color: #900f0f;
+  background-color:#106b01;
   transform: scale(1.1);
 }
 
@@ -96,8 +96,32 @@
   text-align: center;
   margin-top: 30px;
   font-size: 14px;
-  color: white;
+  color: #ffff7b ;
   padding: 16px;
   border-top: 1px solid #ddd;
-  background-color: #106b01;
+  background-color:   #900f0f;
+}
+
+.footer-section ul {
+  list-style: disc;
+  padding-left: 20px; /* Indent bullets */
+  margin: 0;
+  color: #106b01;
+}
+
+.footer-section li {
+  margin-bottom: 8px;
+}
+
+.footer-section a {
+  text-decoration: none;
+  color: #333;
+  font-size: 15px;
+  position: relative;
+}
+
+.footer-section a:hover,
+.footer-section a:focus {
+  color: #106b01; /* green hover */
+  text-decoration: underline;
 }
