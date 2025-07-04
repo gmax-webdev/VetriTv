@@ -10,12 +10,11 @@ export default function HomePage() {
         <div>
           <MainFeature />
           <LiveUpdates />
-            <VideoCarousel /> {/* 🔥 Add Here */}
+          {/* <div style={{ backgroundColor: '#f8f8f8', padding: '10px' }}>Center Column</div>
+          <div style={{ backgroundColor: '#fafafa', padding: '10px' }}>Right Column</div>
+          <VideoCarousel /> 🔥 Add Here */}
         </div>
-
-        {/* CenterColumn & RightColumn will go here */}
-        <div style={{ backgroundColor: '#f8f8f8', padding: '10px' }}>Center Column</div>
-        <div style={{ backgroundColor: '#fafafa', padding: '10px' }}>Right Column</div>
+       
       </div>
     </main>
   );

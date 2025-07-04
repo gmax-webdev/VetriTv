@@ -1,0 +1,47 @@
+.trending-container {
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 16px;
+  background-color: #fff;
+  overflow-x: auto;
+}
+
+.trending-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  padding-left: 50px;
+}
+
+.trending-icon {
+  font-size: 16px;
+  color: black;
+}
+
+.trending-label {
+  font-weight: bold;
+  color: black;
+  font-size: 14px;
+}
+
+.trending-separator {
+  font-size: 14px;
+  color: #555;
+}
+
+.trending-links {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.trending-links a {
+  text-decoration: none;
+  color: #1a1a1a;
+  transition: color 0.2s ease;
+}
+
+.trending-links a:hover {
+  color: #0056b3;
+}

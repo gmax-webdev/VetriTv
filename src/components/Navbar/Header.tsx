@@ -12,23 +12,40 @@ const Header: React.FC = () => {
           <Image
             src="/Assets/VLogo.png"
             alt="Vetri TV"
-            width={400}
-            height={280}
+            width={350}
+            height={200}
             className="header-logo"
           />
         </div>
+
         <div className="social-icons">
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-twitter"></i>
-          </a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.youtube.com/@Vettritvnews" // ✅ Replace with your real link
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <i className="fab fa-youtube"></i>
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://web.facebook.com/vettritelevision" // ✅ Replace with your real link
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fab fa-facebook-f"></i>
+          </a>
+          <a
+            href="https://www.instagram.com/vettritv_news/" // ✅ Replace with your real link
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <i className="fab fa-instagram"></i>
           </a>
-          <a href="#">
-            <i className="fas fa-globe"></i>
+          <a
+            href="https://x.com/vettritv" // ✅ Replace with your real link
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <i className="fab fa-twitter"></i>
           </a>
         </div>
       </div>

@@ -169,7 +169,6 @@
 .top-header {
   background-color: #ffffff;
   border-bottom: 1px solid #e2e2e2;
-  padding: 12px 0;
   width: 100%;
 }
 
@@ -198,6 +197,7 @@
 .social-icons {
   display: flex;
   gap: 12px;
+  margin-right: 50px;
 }
 
 .social-icons a {

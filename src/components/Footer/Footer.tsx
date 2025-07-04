@@ -9,43 +9,41 @@ const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <div className="footer-top">
-        {/* Logo and social icons */}
+        {/* Left: About Links */}
+        <div className="footer-links-grid">
+          <div className="footer-section">
+
+            <ul>
+              <li><Link href="#">About Us</Link></li>
+              <li><Link href="#">Contact Us</Link></li>
+              <li><Link href="#">Code of Ethics</Link></li>
+              <li><Link href="#">Terms and Conditions</Link></li>
+              <li><Link href="#">Privacy Policy</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Right: Logo + Social Icons */}
         <div className="footer-logo-social">
           <Image
             src="/Assets/VLogo.png"
             alt="Vetri TV Logo"
             width={350}
-            height={180}
+            height={190}
             className="footer-logo"
           />
-          <p className="footer-heading">Get To Know Us</p>
           <div className="social-icons">
-            <Link href="#"><i className="fab fa-twitter"></i></Link>
-            <Link href="#"><i className="fab fa-youtube"></i></Link>
-            <Link href="#"><i className="fab fa-instagram"></i></Link>
-            <Link href="#"><i className="fab fa-dribbble"></i></Link>
+            <Link href="https://web.facebook.com/vettritelevision" target="_blank"><i className="fab fa-facebook-f"></i></Link>
+            <Link href="https://x.com/vettritv" target="_blank"><i className="fab fa-twitter"></i></Link>
+            <Link href="https://www.youtube.com/@Vettritvnews" target="_blank"><i className="fab fa-youtube"></i></Link>
+            <Link href="https://www.instagram.com/vettritv_news" target="_blank"><i className="fab fa-instagram"></i></Link>
           </div>
-        </div>
-
-        {/* Newsletter */}
-        <div className="footer-newsletter">
-          <h4>Subscribe Our Newsletter</h4>
-          <p>Signup for our Newsletter and stay informed<br />Some asteroids have us in their</p>
-          <form>
-            <input type="email" placeholder="Enter Your e-mail" />
-            <button type="submit">Subscribe</button>
-          </form>
         </div>
       </div>
 
-      {/* Bottom */}
+      {/* Footer Bottom */}
       <div className="footer-bottom">
         <p>Copyright © Global Max Networks Private Limited 2025. All rights reserved</p>
-        <div className="footer-links">
-          <Link href="#">About Us</Link>
-          <Link href="#">Private Policy</Link>
-          <Link href="#">Forums</Link>
-        </div>
       </div>
     </footer>
   );

@@ -1,43 +1,63 @@
-/* Wrapper for centering content */
-.home-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+/* src/globals.css */
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Base grid layout */
+/* Base setup */
+html, body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff;
+  color: #000;
+  line-height: 1.6;
+}
+
+/* Full width site wrapper (for background/ads) */
+.site-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+/* Centered site content */
+.site-container {
+  width: 100%;
+  max-width: 1200px; /* Like Al Jazeera */
+  padding: 0 16px;
+}
+
+/* Main page content spacing */
+.page-content {
+  padding: 20px 0;
+}
+
+/* Grid layout for homepage sections */
 .grid-layout {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 2fr 1.5fr 1fr;
   gap: 20px;
 }
 
-/* Desktop: 3 columns */
-@media screen and (min-width: 1024px) {
-  .grid-layout {
-    grid-template-columns: 2fr 1.5fr 1fr;
-  }
-}
-
-/* Tablet: 2 columns, hide right */
-@media screen and (min-width: 768px) and (max-width: 1023px) {
+@media screen and (max-width: 1024px) {
   .grid-layout {
     grid-template-columns: 2fr 1fr;
   }
-
   .right-column {
     display: none;
   }
 }
 
-/* Mobile: 1 column, hide center & right */
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
   .grid-layout {
     grid-template-columns: 1fr;
   }
 
-  .right-column,
-  .center-column {
+  .center-column,
+  .right-column {
     display: none;
   }
 }
