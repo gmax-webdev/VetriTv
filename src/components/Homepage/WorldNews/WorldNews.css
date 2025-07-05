@@ -1,21 +1,40 @@
-/* .world-news {
-  background-color: #fff;
-  padding: 1rem;
+.world-news {
+  padding: 10px;
 }
 
-.world-news h3 {
-  color: #900f0f;
-  margin-bottom: 12px;
+.world-news h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #006400; /* Dark green for your brand */
+  border-bottom: 2px solid #006400;
+  padding-bottom: 4px;
 }
 
-.news-box {
+.world-news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.world-news-item {
   display: flex;
   gap: 10px;
-  align-items: center;
+  align-items: start;
 }
 
-.news-box img {
-  width: 100px;
-  height: auto;
-  border-radius: 5px;
-} */
+.world-news-item img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.world-news-item a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+}
+
+.world-news-item a:hover {
+  color: #006400;
+}

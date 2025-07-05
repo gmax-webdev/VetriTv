@@ -1,29 +1,42 @@
-/* src/components/LayoutWrapper/LayoutWrapper.css */
-
-.homepage-grid {
+.home-grid-wrapper {
   display: grid;
-  grid-template-columns: 3fr 1.5fr 1.5fr; /* Left wider, Center & Right equal */
-  gap: 2rem;
-  max-width: 1280px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  grid-template-columns: 3fr 1fr 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.left-column,
-.center-column,
+/* Left column: Latest video and Live updates */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Center column: Latest News */
+.center-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Right column: World News */
 .right-column {
   display: flex;
   flex-direction: column;
+  gap: 20px;
+}
+
+/* Responsive layout */
+@media (max-width: 1024px) {
+  .home-grid-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 768px) {
-  .homepage-grid {
+  .home-grid-wrapper {
     grid-template-columns: 1fr;
-  }
-
-  .left-column,
-  .center-column,
-  .right-column {
-    margin-bottom: 2rem;
   }
 }

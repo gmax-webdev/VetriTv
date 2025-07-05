@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import he from 'he';
 import './LiveUpdates.css';
 
 interface Update {
@@ -12,14 +13,37 @@ const LiveUpdates = () => {
   const [updates, setUpdates] = useState<Update[]>([]);
 
   useEffect(() => {
-    // Replace this with your backend fetch
-    setUpdates([
-      { timeAgo: '3m ago', message: "If you're just joining us" },
-      { timeAgo: '22m ago', message: 'WATCH: Mapping Israeli strikes on Iran’s air defences' },
-      { timeAgo: '42m ago', message: 'Israeli military arrests two Palestinians during West Bank raid, settlers attack ambulance' },
-      { timeAgo: '1h ago', message: 'Trump says Iran may restart nuclear programme in new locations' }
-    ]);
+    fetch('https://vettritv.lk/wp-json/wp/v2/posts?categories=54&per_page=10') // 🔁 Fetch latest 10 updates
+      .then(res => res.json())
+      .then(data => {
+        const liveItems: Update[] = data.map((item: any) => ({
+          timeAgo: getTimeAgo(item.date),
+          message: stripHTML(he.decode(item.title.rendered)),
+        }));
+        setUpdates(liveItems);
+      })
+      .catch(err => console.error('Error fetching live updates:', err));
   }, []);
+
+  const getTimeAgo = (dateString: string) => {
+    const postDate = new Date(dateString);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - postDate.getTime()) / 60000); // minutes
+
+    if (diff < 1) return 'Just now';
+    if (diff === 1) return '1m ago';
+    if (diff < 60) return `${diff}m ago`;
+
+    const hours = Math.floor(diff / 60);
+    if (hours < 24) return `${hours}h ago`;
+
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  };
+
+  const stripHTML = (html: string) => {
+    return html.replace(/<[^>]*>/g, '');
+  };
 
   return (
     <div className="live-updates-section">

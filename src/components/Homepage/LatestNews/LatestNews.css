@@ -1,21 +1,119 @@
-/* .latest-news {
-  background-color: #fff;
-  padding: 1rem;
+.latest-news {
+  padding: 16px;
 }
 
-.latest-news h3 {
+.latest-news h2 {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
   color: #106b01;
+}
+
+/* First big post */
+.latest-news-featured {
+  margin-bottom: 16px;
+}
+
+.latest-news-featured img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.latest-news-featured h3 {
+  font-size: 1.25rem;
+  margin-top: 10px;
+  color: #000;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.latest-news-featured h3:hover {
+  color: #106b01;
+  border-bottom: 2px solid #106b01;
+}
+
+/* Next 2: thumbnail + title */
+.latest-news-thumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 12px;
 }
 
-.news-item {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.latest-news-thumb img {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
-.news-item img {
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-} */
+.latest-news-thumb p {
+  font-size: 0.95rem;
+  margin: 0;
+  color: #000;
+  transition: color 0.3s;
+}
+
+.latest-news-thumb p:hover {
+  color: #106b01;
+  text-decoration: underline;
+}
+
+/* Remaining: title-only links */
+.latest-news-text {
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
+
+.latest-news-text a {
+  font-size: 0.95rem;
+  color: #000;
+  text-decoration: none;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.latest-news-text a:hover {
+  color: #106b01;
+  border-bottom: 1px solid #106b01;
+}
+.latest-news-list > div {
+  border-bottom: 1px solid #e0e0e0; /* subtle separator */
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.latest-news-thumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.latest-news-thumb img {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.latest-news-thumb p {
+  font-size: 0.95rem;
+  margin: 0;
+  color: #000;
+  transition: color 0.3s;
+}
+
+.latest-news-thumb p:hover {
+  color: #106b01;
+  text-decoration: underline;
+}
+
+.latest-news-text a {
+  font-size: 0.95rem;
+  color: #000;
+  text-decoration: none;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.latest-news-text a:hover {
+  color: #106b01;
+  border-bottom: 1px solid #106b01;
+}

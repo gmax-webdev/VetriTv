@@ -1,15 +1,15 @@
 'use client';
-
 import React from 'react';
 import LatestVideo from '../VideoFeature/LatestVideo';
 import LiveUpdates from '../LiveUpdates/LiveUpdates';
 import LatestNews from '../LatestNews/LatestNews';
 import WorldNews from '../WorldNews/WorldNews';
-import './LayoutWrapper.css';
+import './LayoutWrapper.css'; // You can customize this file
+
 
 const LayoutWrapper = () => {
   return (
-    <div className="homepage-grid">
+    <div className="home-grid-wrapper">
       {/* Left Column */}
       <div className="left-column">
         <LatestVideo />
