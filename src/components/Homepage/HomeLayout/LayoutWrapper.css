@@ -1,0 +1,29 @@
+/* src/components/LayoutWrapper/LayoutWrapper.css */
+
+.homepage-grid {
+  display: grid;
+  grid-template-columns: 3fr 1.5fr 1.5fr; /* Left wider, Center & Right equal */
+  gap: 2rem;
+  max-width: 1280px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.left-column,
+.center-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .homepage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .left-column,
+  .center-column,
+  .right-column {
+    margin-bottom: 2rem;
+  }
+}

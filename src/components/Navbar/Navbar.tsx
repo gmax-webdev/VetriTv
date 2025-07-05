@@ -5,7 +5,7 @@ import './Navbar.css';
 import Link from 'next/link';
 
 const navItems = [
-  { label: 'Home', href: '#' },
+  { label: 'Home', href: '/' },
   { label: 'Latest News', href: '#' },
   { label: 'Main News', href: '#' },
   {

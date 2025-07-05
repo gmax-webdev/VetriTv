@@ -1,13 +1,8 @@
 // src/app/layout.tsx
-
 import '../globals.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import Navbar from '../components/Navbar/Navbar';
-import Header from '@/components/Navbar/Header';
-import TrendingBar from '@/components/Navbar/TrendingBar';
-import BreakingNews from '@/components/Navbar/BreakingNewsBar';
-import Footer from '@/components/Footer/Footer';
 import { Poppins } from 'next/font/google';
+import LayoutWrapper from '../components/LayoutWrapper'; // 👈 new wrapper
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -26,14 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <div className="site-wrapper">
           <div className="site-container">
-            <Header />
-            <Navbar />
-            <TrendingBar />
-            <BreakingNews />
-            <main className="page-content">
+            <LayoutWrapper>
               {children}
-            </main>
-            <Footer />
+            </LayoutWrapper>
           </div>
         </div>
       </body>

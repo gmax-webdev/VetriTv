@@ -1,13 +1,9 @@
-import LatestVideo from '@/components/Homepage/VideoFeature/LatestVideo';
-// import MainFeature from '@/components/Homepage/MainFeature';
-import ContactForm from '@/components/ContactForm/ContactForm';
+import LayoutWrapper from '../components/Homepage/HomeLayout/LayoutWrapper';
 
-export default function Home() {
+export default function HomePage() {
   return (
     <main>
-      <LatestVideo />
-       {/* <MainFeature /> */}
-         {/* <ContactForm /> */}
+      <LayoutWrapper />
     </main>
   );
 }

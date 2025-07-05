@@ -1,0 +1,49 @@
+.live-updates-section {
+  background: #fff8dc;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.live-title {
+  color: #900f0f;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.live-icon {
+  margin-right: 5px;
+}
+
+.updates-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.updates-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: orange;
+  border-radius: 50%;
+  margin-top: 6px;
+}
+
+.time {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+  min-width: 60px;
+}
+
+.message {
+  font-size: 0.9rem;
+  color: #222;
+}
