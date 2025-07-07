@@ -7,6 +7,8 @@ import Navbar from './Navbar/Navbar';
 import TrendingBar from './Navbar/TrendingBar';
 import BreakingNews from './Navbar/BreakingNewsBar';
 import Footer from './Footer/Footer';
+import YouTubeShorts from '@/components/Homepage/YouTubeShorts/YouTubeShorts';
+
 
 const LayoutClient = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -25,7 +27,8 @@ const LayoutClient = ({ children }: { children: React.ReactNode }) => {
           {isHome && <BreakingNews />}
 
           <main className="page-content">{children}</main>
-
+             <YouTubeShorts />
+         
           <Footer />
         </div>
       </div>

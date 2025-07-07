@@ -47,3 +47,19 @@
   font-size: 0.9rem;
   color: #222;
 }
+
+.see-all-button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #900f0f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.see-all-button:hover {
+  background-color: #600b0b;
+}
