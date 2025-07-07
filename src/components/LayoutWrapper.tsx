@@ -8,6 +8,7 @@ import TrendingBar from './Navbar/TrendingBar';
 import BreakingNews from './Navbar/BreakingNewsBar';
 import Footer from './Footer/Footer';
 import YouTubeShorts from '@/components/Homepage/YouTubeShorts/YouTubeShorts';
+import LocalNewsSection from './Homepage/LocalNews/LocalNewsSection';
 
 
 const LayoutClient = ({ children }: { children: React.ReactNode }) => {
@@ -28,7 +29,7 @@ const LayoutClient = ({ children }: { children: React.ReactNode }) => {
 
           <main className="page-content">{children}</main>
              <YouTubeShorts />
-         
+             <LocalNewsSection/>
           <Footer />
         </div>
       </div>

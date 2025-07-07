@@ -14,13 +14,13 @@
 }
 
 .latest-news-featured img {
-  width: 100%;
+  width: 90%;
   height: auto;
   border-radius: 8px;
 }
 
 .latest-news-featured h3 {
-  font-size: 1.25rem;
+  font-size: 1.rem;
   margin-top: 10px;
   color: #000;
   transition: color 0.3s, border-bottom 0.3s;

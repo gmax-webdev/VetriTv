@@ -1,6 +1,6 @@
 .home-grid-wrapper {
   display: grid;
-  grid-template-columns: 3fr 1fr 1fr;
+  grid-template-columns: 3fr 1fr 0.9fr;
   gap: 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -31,7 +31,7 @@
 /* Responsive layout */
 @media (max-width: 1024px) {
   .home-grid-wrapper {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 3fr 1fr ;
   }
 }
 

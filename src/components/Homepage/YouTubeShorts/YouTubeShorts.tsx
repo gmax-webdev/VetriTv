@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './YouTubeShorts.css';
 
 interface YouTubeVideo {
@@ -9,69 +9,65 @@ interface YouTubeVideo {
   thumbnail: string;
 }
 
-const API_KEY = 'YOUR_YOUTUBE_API_KEY'; // Replace with your real key
-const CHANNEL_ID = 'UCHK8XG0Jn257CC6TQSkq_Rw';
-
 const YouTubeShorts = () => {
-  const [shorts, setShorts] = useState<YouTubeVideo[]>([]);
+  const [videos, setVideos] = useState<YouTubeVideo[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchShorts = async () => {
       try {
-        const searchRes = await fetch(
-          `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&maxResults=20&order=date&type=video`
-        );
-        const searchData = await searchRes.json();
-        const videoIds = searchData.items.map((item: any) => item.id.videoId).join(',');
-
-        const videoRes = await fetch(
-          `https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoIds}&part=contentDetails,snippet`
-        );
-        const videoData = await videoRes.json();
-
-        const getDurationInSeconds = (duration: string): number => {
-          const match = duration.match(/PT(?:(\d+)M)?(?:(\d+)S)?/);
-          const minutes = parseInt(match?.[1] || '0');
-          const seconds = parseInt(match?.[2] || '0');
-          return minutes * 60 + seconds;
-        };
-
-        const shortsOnly = videoData.items.filter((video: any) => {
-          const seconds = getDurationInSeconds(video.contentDetails.duration);
-          return seconds <= 60; // Only keep videos under 60s
-        });
-
-        const formatted = shortsOnly.map((video: any) => ({
-          id: video.id,
-          title: video.snippet.title,
-          thumbnail: video.snippet.thumbnails.medium.url,
-        }));
-
-        setShorts(formatted);
-      } catch (error) {
-        console.error('Error fetching shorts:', error);
+        const res = await fetch('/api/youtube-shorts');
+        const data = await res.json();
+        setVideos(data);
+      } catch (err) {
+        console.error('Error fetching shorts:', err);
       }
     };
 
     fetchShorts();
   }, []);
 
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="shorts-section">
-      <h2><span className="highlight-bar" /> WATCH LATEST SHORTS</h2>
+    <div className="shorts-wrapper">
+      <h2 className="shorts-heading">
+        <span className="highlight-bar" />
+        WATCH LATEST SHORTS
+      </h2>
+
       <div className="shorts-container">
-        {shorts.map((video) => (
-          <a
-            key={video.id}
-            href={`https://www.youtube.com/shorts/${video.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="short-card"
-          >
-            <img src={video.thumbnail} alt={video.title} />
-            <p>{video.title}</p>
-          </a>
-        ))}
+        <button className="scroll-arrow left" onClick={scrollLeft}>&lt;</button>
+
+        <div className="shorts-scroll" ref={scrollRef}>
+        {videos.slice(0, 10).map((video) => (
+            <a
+              key={video.id}
+              href={`https://www.youtube.com/shorts/${video.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="short-card"
+            >
+              <div className="short-thumbnail-wrapper">
+                <img src={video.thumbnail} alt={video.title} className="short-thumbnail" />
+                <div className="short-overlay" />
+                <p className="short-title">{video.title}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <button className="scroll-arrow right" onClick={scrollRight}>&gt;</button>
       </div>
     </div>
   );

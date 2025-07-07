@@ -1,9 +1,31 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './BreakingNewsBar.css';
 
+interface BreakingNewsItem {
+  id: number;
+  title: string;
+  link: string;
+}
+
 const BreakingNewsBar = () => {
+  const [newsItems, setNewsItems] = useState<BreakingNewsItem[]>([]);
+
+  useEffect(() => {
+    const fetchBreakingNews = async () => {
+      try {
+        const res = await fetch('/api/breaking-news');
+        const data = await res.json();
+        setNewsItems(data);
+      } catch (error) {
+        console.error('Error fetching breaking news:', error);
+      }
+    };
+
+    fetchBreakingNews();
+  }, []);
+
   return (
     <div className="breaking-wrapper">
       <div className="breaking-label">
@@ -12,9 +34,22 @@ const BreakingNewsBar = () => {
       </div>
       <div className="breaking-ticker">
         <div className="ticker-content">
-          <span>
-            🟡 Vetri TV Exclusive: Major update from Parliament — 🟡 Heavy rainfall in Tamil Nadu — 🟡 Election Results LIVE — 🟡 Sports: India wins the final — 🟡 Breaking: Petrol prices updated nationwide
-          </span>
+          {newsItems.length > 0 ? (
+            newsItems.map((item, index) => (
+              <span key={item.id}>
+                🟡{' '}
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  dangerouslySetInnerHTML={{ __html: item.title }}
+                ></a>
+                {index < newsItems.length - 1 && ' — '}
+              </span>
+            ))
+          ) : (
+            <span>🟡 No breaking news now. Stay tuned.</span>
+          )}
         </div>
       </div>
     </div>

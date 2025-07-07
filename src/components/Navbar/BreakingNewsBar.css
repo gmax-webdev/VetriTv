@@ -81,3 +81,13 @@
     font-size: 12px;
   }
 }
+
+.ticker-content a {
+  color: yellow !important;  /* Force yellow */
+  text-decoration: none;
+}
+
+.ticker-content a:hover {
+  text-decoration: underline;
+}
+
