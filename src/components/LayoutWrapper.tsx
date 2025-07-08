@@ -9,12 +9,10 @@ import BreakingNews from './Navbar/BreakingNewsBar';
 import Footer from './Footer/Footer';
 import YouTubeShorts from '@/components/Homepage/YouTubeShorts/YouTubeShorts';
 import LocalAndPoliticalLayout from '@/components/Homepage/LocalAndPoliticalNews/LocalAndPoliticalLayout';
-import SportsNews from './Homepage/SportsNews/SportsNews';
+import SportsSection from '@/components/Homepage/SportsNews/SportsSection'; 
 
 const LayoutClient = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-
-  // 👇 Only show trending & breaking on homepage
   const isHome = pathname === '/';
 
   return (
@@ -23,14 +21,16 @@ const LayoutClient = ({ children }: { children: React.ReactNode }) => {
         <div className="site-container">
           <Header />
           <Navbar />
-          
+
           {isHome && <TrendingBar />}
           {isHome && <BreakingNews />}
 
           <main className="page-content">{children}</main>
-             <YouTubeShorts />
-            <LocalAndPoliticalLayout />
-              {/* <SportsNews/>  */}
+
+          {/* ✅ Show only on homepage */}
+          {isHome && <YouTubeShorts />}
+          {isHome && <LocalAndPoliticalLayout />}
+          {isHome && <SportsSection />}
           <Footer />
         </div>
       </div>

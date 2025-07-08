@@ -6,8 +6,8 @@ import Link from 'next/link';
 
 const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'Latest News', href: '/latestnews' },
-  { label: 'Main News', href: '#' },
+  { label: 'Latest News', href: '/latest-news' },
+  { label: 'Main News', href: '/main-news' },
   {
     label: 'More',
     href: '#',
@@ -37,10 +37,19 @@ const Navbar: React.FC = () => {
               <Link href={item.href} className="nav-link">
                 {item.label}
               </Link>
+
+              {/* Dropdown items */}
               {item.dropdown && (
                 <div className="dropdown">
                   {item.dropdown.map((sub) => (
-                    <Link key={sub} href="#" className="dropdown-link">
+                    <Link
+                      key={sub}
+                      href={`/${sub
+                        .toLowerCase()
+                        .replace(/\s+/g, '-')
+                        .replace(/[^\w-]/g, '')}`}
+                      className="dropdown-link"
+                    >
                       {sub}
                     </Link>
                   ))}

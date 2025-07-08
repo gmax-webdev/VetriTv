@@ -1,0 +1,38 @@
+.education-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.page-title {
+  font-size: 2rem;
+  color: #106b01;
+  border-bottom: 3px solid #106b01;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+}
+
+.education-news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.edu-news-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.edu-news-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.edu-news-title {
+  font-size: 1.1rem;
+  padding: 10px;
+  color: #333;
+}
