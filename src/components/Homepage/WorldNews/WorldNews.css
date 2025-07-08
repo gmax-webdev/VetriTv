@@ -39,3 +39,36 @@
 .world-news-item a:hover {
   color: #006400;
 }
+@media screen and (max-width: 768px) {
+  .world-news {
+    padding: 8px;
+  }
+
+  .world-news h2 {
+    font-size: 18px;
+  }
+
+  .world-news-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .world-news-item img {
+    width: 100%;
+    height: auto;
+  }
+
+  .world-news-item a {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .world-news h2 {
+    font-size: 16px;
+  }
+
+  .world-news-item a {
+    font-size: 13px;
+  }
+}

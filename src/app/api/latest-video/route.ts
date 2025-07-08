@@ -1,27 +1,27 @@
-// src/app/api/latest-playlist-video/route.ts
+// src/app/api/latest-video/route.ts
 import { NextResponse } from 'next/server';
 
-const API_KEY = 'AIzaSyDlkfKOFRULXjw1R0q6JwGtgXimDPpWZYE';
-const PLAYLIST_ID = 'PLDyNzXGx4-hV5khEHBhT883FV0FPx3FmV';
-
 export async function GET() {
-  const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${PLAYLIST_ID}&maxResults=1&key=${API_KEY}`;
+  const FEED_URL = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCHK8XG0Jn257CC6TQSkq_Rw';
 
   try {
-    const response = await fetch(url);
-    const data = await response.json();
+    const res = await fetch(FEED_URL);
+    const xml = await res.text();
 
-    if (!data.items || data.items.length === 0) {
-      return NextResponse.json({ error: 'No videos found in playlist' }, { status: 404 });
+    const videoIdMatch = xml.match(/<yt:videoId>(.*?)<\/yt:videoId>/);
+    const titleMatch = xml.match(/<title>(.*?)<\/title>/g);
+    const thumbnailMatch = xml.match(/<media:thumbnail url="(.*?)"/);
+
+    if (!videoIdMatch || !titleMatch || !thumbnailMatch) {
+      return NextResponse.json({ error: 'Failed to parse video data' }, { status: 500 });
     }
 
-    const latest = data.items[0];
-    const videoId = latest.snippet.resourceId.videoId;
-    const title = latest.snippet.title;
-    const thumbnail = latest.snippet.thumbnails?.medium?.url || '';
+    const videoId = videoIdMatch[1];
+    const title = titleMatch[1].replace(/<\/?title>/g, ''); // second <title> is the video title
+    const thumbnail = thumbnailMatch[1];
 
     return NextResponse.json({ videoId, title, thumbnail });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch playlist video' }, { status: 500 });
+  } catch (err) {
+    return NextResponse.json({ error: 'Failed to fetch video' }, { status: 500 });
   }
 }

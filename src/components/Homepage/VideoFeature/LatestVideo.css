@@ -28,9 +28,33 @@
 }
 
 .video-title {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 800;
   text-decoration: underline;
   color:  #006400;
   margin-top: 10px;
+}
+ .video-thumbnail {
+  position: relative;
+  height: 350px; /* Adjust as needed */
+  width: 500px;
+  overflow: hidden;
+}
+
+.video-thumbnail iframe {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px 10px 0 0;
+}
+.video-thumbnail iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px 10px 0 0;
+}
+
+@media screen and (max-width: 768px) {
+  .latest-video-title {
+    font-size: 1rem;
+    padding: 8px;
+  }
 }

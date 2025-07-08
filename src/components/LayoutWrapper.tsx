@@ -8,8 +8,8 @@ import TrendingBar from './Navbar/TrendingBar';
 import BreakingNews from './Navbar/BreakingNewsBar';
 import Footer from './Footer/Footer';
 import YouTubeShorts from '@/components/Homepage/YouTubeShorts/YouTubeShorts';
-import LocalNewsSection from './Homepage/LocalNews/LocalNewsSection';
-
+import LocalAndPoliticalLayout from '@/components/Homepage/LocalAndPoliticalNews/LocalAndPoliticalLayout';
+import SportsNews from './Homepage/SportsNews/SportsNews';
 
 const LayoutClient = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -29,7 +29,8 @@ const LayoutClient = ({ children }: { children: React.ReactNode }) => {
 
           <main className="page-content">{children}</main>
              <YouTubeShorts />
-             <LocalNewsSection/>
+            <LocalAndPoliticalLayout />
+              {/* <SportsNews/>  */}
           <Footer />
         </div>
       </div>
