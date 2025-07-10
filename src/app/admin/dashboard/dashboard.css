@@ -1,0 +1,66 @@
+/* src/app/admin/dashboard/dashboard.css */
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: white;
+  border-left: 6px solid #900f0f;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  transition: 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.stat-card p {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.visitors { border-left-color: #106b01; }
+.views { border-left-color: #900f0f; }
+.posts { border-left-color: #ffaa00; }
+.messages { border-left-color: #3333cc; }
+
+.recent-activities {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.recent-activities h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.recent-activities ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.recent-activities li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+}

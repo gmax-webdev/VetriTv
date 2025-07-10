@@ -1,0 +1,40 @@
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.logo {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  font-weight: bold;
+  color: #ffff7b; /* Your yellow brand color */
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-nav li {
+  margin-bottom: 20px;
+}
+
+.sidebar-nav a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-nav a:hover {
+  color: #ffff7b;
+  font-weight: bold;
+}

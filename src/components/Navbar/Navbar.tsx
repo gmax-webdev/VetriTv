@@ -60,7 +60,9 @@ const Navbar: React.FC = () => {
         </nav>
 
         <div className="navbar-controls">
+         <Link href="/live" >
           <button className="live-btn">LIVE</button>
+          </Link>
         </div>
 
         <div

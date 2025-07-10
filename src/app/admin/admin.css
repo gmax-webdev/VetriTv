@@ -1,0 +1,22 @@
+/* src/app/admin/admin.css */
+
+.admin-container {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+}
+
+.admin-sidebar {
+  width: 240px;
+  background-color: #900f0f;
+  color: white;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.admin-main {
+  flex-grow: 1;
+  padding: 30px;
+  background-color: #f5f5f5;
+  overflow-y: auto;
+}

@@ -14,11 +14,11 @@ const Footer: React.FC = () => {
           <div className="footer-section">
 
             <ul>
-              <li><Link href="#">About Us</Link></li>
+              <li><Link href="/aboutus">About Us</Link></li>
               <li><Link href="/contact">Contact Us</Link></li>
-              <li><Link href="#">Code of Ethics</Link></li>
-              <li><Link href="#">Terms and Conditions</Link></li>
-              <li><Link href="#">Privacy Policy</Link></li>
+              <li><Link href="/code-of-ethics">Code of Ethics</Link></li>
+              <li><Link href="/terms-and-conditions">Terms and Conditions</Link></li>
+              <li><Link href="/privacy-policy">Privacy Policy</Link></li>
             </ul>
           </div>
         </div>
