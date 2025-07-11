@@ -1,134 +1,110 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
-import QuillEditor from '@/components/Admin/QuillEditor';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient'; // Adjust path if needed
+import './AddPostForm.css'; // Your styling file
 
 export default function AddPostForm() {
+  const router = useRouter();
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tags, setTags] = useState('');
   const [category, setCategory] = useState('');
-  const [format, setFormat] = useState('standard');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [tags, setTags] = useState('');
+  const [featuredImage, setFeaturedImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFeaturedImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleImageUpload = async () => {
+    if (!featuredImage) return '';
+    setUploading(true);
+    const { data, error } = await supabase.storage
+      .from('news')
+      .upload(`featured/${Date.now()}_${featuredImage.name}`, featuredImage);
+
+    setUploading(false);
+    if (error) {
+      alert('Image upload failed');
+      return '';
+    }
+    return supabase.storage.from('news').getPublicUrl(data.path).data.publicUrl;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    let image_url = '';
-    if (imageFile) {
-      const fileName = `${Date.now()}-${imageFile.name}`;
-      const { data, error } = await supabase.storage
-        .from('news-images')
-        .upload(fileName, imageFile);
-
-      if (data) {
-        image_url = supabase.storage
-          .from('news-images')
-          .getPublicUrl(data.path).data.publicUrl;
-      } else {
-        console.error('Image upload failed:', error);
-      }
-    }
+    const imageUrl = await handleImageUpload();
 
     const { error } = await supabase.from('posts').insert([
       {
         title,
         content,
-        image_url,
-        tags: tags.split(',').map(t => t.trim()),
         category,
-        format,
+        tags: tags.split(',').map((t) => t.trim()),
+        featured_image: imageUrl,
+        status: 'published',
       },
     ]);
 
-    setLoading(false);
     if (!error) {
-      alert('Post added!');
-      setTitle('');
-      setContent('');
-      setTags('');
-      setCategory('');
-      setImageFile(null);
+      alert('Post published successfully!');
+      router.push('/');
     } else {
-      console.error('Post insert error:', error);
+      alert('Failed to publish post');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '20px' }}>
+    <form className="add-post-form" onSubmit={handleSubmit}>
+      <h2>Add News Post</h2>
+
       <input
         type="text"
-        placeholder="Add title"
+        placeholder="Enter Title"
         value={title}
-        onChange={e => setTitle(e.target.value)}
+        onChange={(e) => setTitle(e.target.value)}
         required
       />
 
-      {/* Fixed ReactQuill usage */}
-      <QuillEditor value={content} onChange={setContent} />
+      <textarea
+        placeholder="Enter content"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        rows={8}
+        required
+      />
 
-      <div>
-        <label>Featured Image:</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={e => setImageFile(e.target.files?.[0] || null)}
-        />
-      </div>
+      <select value={category} onChange={(e) => setCategory(e.target.value)} required>
+        <option value="">Select Category</option>
+        <option value="Local News">Local News</option>
+        <option value="World News">World News</option>
+        <option value="Politics">Politics</option>
+        <option value="Updates">Updates</option>
+      </select>
 
-      <div>
-        <label>Category:</label>
-        <select value={category} onChange={e => setCategory(e.target.value)}>
-          <option value="">-- Select --</option>
-          <option value="Top">Top</option>
-          <option value="World News">World News</option>
-          <option value="News Line">News Line</option>
-          <option value="Updates">Updates</option>
-        </select>
-      </div>
+      <input
+        type="text"
+        placeholder="Tags (comma separated)"
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
+      />
 
-      <div>
-        <label>Tags (comma separated):</label>
-        <input value={tags} onChange={e => setTags(e.target.value)} />
-      </div>
+      <input type="file" accept="image/*" onChange={handleImageChange} />
 
-      <div>
-        <label>Format:</label>
-        <label>
-          <input
-            type="radio"
-            name="format"
-            value="standard"
-            checked={format === 'standard'}
-            onChange={() => setFormat('standard')}
-          />{' '}
-          Standard
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="format"
-            value="image"
-            onChange={() => setFormat('image')}
-          />{' '}
-          Image
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="format"
-            value="video"
-            onChange={() => setFormat('video')}
-          />{' '}
-          Video
-        </label>
-      </div>
+      {previewUrl && (
+        <img src={previewUrl} alt="Preview" className="image-preview" />
+      )}
 
-      <button type="submit" disabled={loading}>
-        {loading ? 'Publishing...' : 'Publish'}
+      <button type="submit" disabled={uploading}>
+        {uploading ? 'Uploading...' : 'Publish'}
       </button>
     </form>
   );

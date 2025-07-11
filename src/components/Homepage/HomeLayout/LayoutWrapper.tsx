@@ -18,7 +18,7 @@ const LayoutWrapper = () => {
 
       {/* Center Column */}
       <div className="center-column">
-        <LatestNews />
+        <LatestNews/>
       </div>
 
       {/* Right Column */}

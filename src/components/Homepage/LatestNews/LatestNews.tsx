@@ -1,32 +1,65 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+// src/components/Homepage/LatestNews/LatestNews.tsx
 
-export default function LatestNews() {
-  const [news, setNews] = useState<any[]>([]);
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import './LatestNews.css';
+
+interface Post {
+  id: number;
+  title: string;
+  image_url: string;
+}
+
+const LatestNews: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchNews = async () => {
-      const { data } = await supabase.from('news').select('*').order('created_at', { ascending: false });
-      setNews(data || []);
+    const fetchLatestNews = async () => {
+      try {
+        const res = await fetch('https://vettritv.lk/wp-json/wp/v2/posts?_embed');
+        const data = await res.json();
+
+        const formatted = data.map((post: any) => ({
+          id: post.id,
+          title: post.title.rendered,
+          image_url:
+            post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '/Assets/default.jpg',
+        }));
+
+        setPosts(formatted);
+      } catch (err) {
+        console.error('Failed to fetch latest news:', err);
+        setPosts([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchNews();
+    fetchLatestNews();
   }, []);
 
   return (
-    <section>
-      <h2>Latest News</h2>
-      <div className="news-list">
-        {news.map((n) => (
-          <div key={n.id}>
-            <img src={n.image_url} width="100%" />
-            <h3>{n.title}</h3>
-            <p>{n.content}</p>
-            <small>{n.category}</small>
-          </div>
-        ))}
-      </div>
+    <section className="latest-news-section">
+      <h2>🕘 Latest News</h2>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : posts.length > 0 ? (
+        <div className="latest-news-grid">
+          {posts.map((post) => (
+            <div key={post.id} className="news-card">
+              <img src={post.image_url} alt={post.title} />
+              <h3>{post.title}</h3>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No latest news available.</p>
+      )}
     </section>
   );
-}
+};
+
+export default LatestNews;
