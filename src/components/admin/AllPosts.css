@@ -1,0 +1,66 @@
+.admin-posts-container {
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.admin-posts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.admin-posts-table th,
+.admin-posts-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-posts-table th {
+  background-color: #900f0f;
+  color: #fff;
+}
+
+.admin-posts-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.thumbnail {
+  width: 60px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  margin: 2px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.edit-btn {
+  background-color: #106b01;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #900f0f;
+  color: white;
+}
+
+.post-filters {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.post-filters input,
+.post-filters select {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}

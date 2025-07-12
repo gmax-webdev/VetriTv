@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient'; // Adjust path if needed
-import './AddPostForm.css'; // Your styling file
+import { supabase } from '@/lib/supabaseClient';
+import './AddPostForm.css';
 
 export default function AddPostForm() {
   const router = useRouter();
@@ -27,16 +27,31 @@ export default function AddPostForm() {
   const handleImageUpload = async () => {
     if (!featuredImage) return '';
     setUploading(true);
-    const { data, error } = await supabase.storage
-      .from('news')
-      .upload(`featured/${Date.now()}_${featuredImage.name}`, featuredImage);
 
-    setUploading(false);
-    if (error) {
+    const fileExt = featuredImage.name.split('.').pop();
+    const fileName = `featured/${Date.now()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('posts')
+      .upload(filePath, featuredImage, {
+        cacheControl: '3600',
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error('Upload Error:', uploadError);
       alert('Image upload failed');
+      setUploading(false);
       return '';
     }
-    return supabase.storage.from('news').getPublicUrl(data.path).data.publicUrl;
+
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('posts').getPublicUrl(filePath);
+
+    setUploading(false);
+    return publicUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -59,29 +74,15 @@ export default function AddPostForm() {
       router.push('/');
     } else {
       alert('Failed to publish post');
+      console.error(error.message);
     }
   };
 
   return (
     <form className="add-post-form" onSubmit={handleSubmit}>
       <h2>Add News Post</h2>
-
-      <input
-        type="text"
-        placeholder="Enter Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
-
-      <textarea
-        placeholder="Enter content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        rows={8}
-        required
-      />
-
+      <input type="text" placeholder="Enter Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+      <textarea placeholder="Enter Content" value={content} onChange={(e) => setContent(e.target.value)} rows={8} required />
       <select value={category} onChange={(e) => setCategory(e.target.value)} required>
         <option value="">Select Category</option>
         <option value="Local News">Local News</option>
@@ -89,23 +90,10 @@ export default function AddPostForm() {
         <option value="Politics">Politics</option>
         <option value="Updates">Updates</option>
       </select>
-
-      <input
-        type="text"
-        placeholder="Tags (comma separated)"
-        value={tags}
-        onChange={(e) => setTags(e.target.value)}
-      />
-
+      <input type="text" placeholder="Tags (comma separated)" value={tags} onChange={(e) => setTags(e.target.value)} />
       <input type="file" accept="image/*" onChange={handleImageChange} />
-
-      {previewUrl && (
-        <img src={previewUrl} alt="Preview" className="image-preview" />
-      )}
-
-      <button type="submit" disabled={uploading}>
-        {uploading ? 'Uploading...' : 'Publish'}
-      </button>
+      {previewUrl && <img src={previewUrl} alt="Preview" className="image-preview" />}
+      <button type="submit" disabled={uploading}>{uploading ? 'Uploading...' : 'Publish'}</button>
     </form>
   );
 }
