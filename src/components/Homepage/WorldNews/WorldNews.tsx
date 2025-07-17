@@ -15,7 +15,7 @@ const WorldNews: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    fetch('/api/world-news')
+       fetch('/api/world-news')
       .then(res => res.json())
       .then(data => setPosts(data))
       .catch(err => console.error('Error fetching world news:', err));

@@ -23,12 +23,13 @@
   align-items: flex-start;
   text-decoration: none;
   color: #000;
-  font-weight: 500;
+  font-weight: 600;
   transition: color 0.2s ease;
 }
 
 .world-news-item:hover {
   color: #006400;
+  text-decoration: underline;
 }
 
 .world-news-item img {

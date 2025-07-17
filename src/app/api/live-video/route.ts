@@ -1,36 +1,40 @@
 import { NextResponse } from 'next/server';
 
-const CHANNEL_ID = 'UCHK8XG0Jn257CC6TQSkq_Rw'; // Your Vettri TV channel ID
+const CHANNEL_ID = 'UCHK8XG0Jn257CC6TQSkq_Rw'; // VettriTV Channel ID
+const API_KEY = process.env.YOUTUBE_API_KEY;
 
 export async function GET() {
   try {
-    const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`);
-    const xml = await res.text();
+    // Step 1: Search for LIVE and COMPLETED streams (latest first)
+    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&type=video&order=date&maxResults=5&key=${API_KEY}`;
+    const searchRes = await fetch(searchUrl);
+    const searchData = await searchRes.json();
 
-    // Match all entries
-    const entries = [...xml.matchAll(/<entry>[\s\S]*?<\/entry>/g)];
+    const videoIds = searchData.items?.map((item: any) => item.id.videoId).join(',');
 
-    for (const entry of entries) {
-      const block = entry[0];
+    if (!videoIds) return NextResponse.json({ error: 'No videos found' });
 
-      // Find <title> and <yt:videoId> inside this entry
-      const titleMatch = block.match(/<title>(.*?)<\/title>/);
-      const idMatch = block.match(/<yt:videoId>(.*?)<\/yt:videoId>/);
+    // Step 2: Get video details to filter livestreams
+    const videosUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,liveStreamingDetails&id=${videoIds}&key=${API_KEY}`;
+    const videosRes = await fetch(videosUrl);
+    const videosData = await videosRes.json();
 
-      if (titleMatch && idMatch) {
-        const title = titleMatch[1];
-        const videoId = idMatch[1];
+    // Step 3: Find most recent LIVE or past livestream
+    const liveVideo = videosData.items.find((video: any) =>
+      video.snippet.liveBroadcastContent === 'live' || video.liveStreamingDetails
+    );
 
-        // If title contains 'live', treat it as live video
-        if (title.toLowerCase().includes('live')) {
-          return NextResponse.json({ liveVideoId: videoId });
-        }
-      }
+    if (liveVideo) {
+      return NextResponse.json({
+        videoId: liveVideo.id,
+        title: liveVideo.snippet.title,
+        thumbnail: liveVideo.snippet.thumbnails.high.url,
+      });
     }
 
-    return NextResponse.json({ liveVideoId: null }); // No live video found
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Failed to fetch feed' }, { status: 500 });
+    return NextResponse.json({ videoId: null });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: 'Failed to fetch YouTube live video' }, { status: 500 });
   }
 }

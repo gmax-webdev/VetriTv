@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import './LocalAndPoliticalNews.css';
 
-const POLITICAL_NEWS_API = 'https://vettritv.lk/wp-json/wp/v2/posts?categories=14158&_embed&per_page=4';
+const POLITICAL_NEWS_API = '/api/political-news';
 
 const PoliticalNews = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -22,14 +22,14 @@ const PoliticalNews = () => {
     <div className="news-section right-news">
       <h2 className="section-title">Political News</h2>
       <div className="main-feature">
-        <img src={main._embedded['wp:featuredmedia']?.[0]?.source_url} alt={main.title.rendered} />
-        <h3 dangerouslySetInnerHTML={{ __html: main.title.rendered }} />
+        <img src={main.image_url} alt={main.title} />
+        <h3>{main.title}</h3>
       </div>
       <div className="sub-grid">
         {rest.map(post => (
           <div key={post.id} className="sub-post">
-            <img src={post._embedded['wp:featuredmedia']?.[0]?.source_url} alt={post.title.rendered} />
-            <p dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+            <img src={post.featured_image} alt={post.title} />
+            <p>{post.title}</p>
           </div>
         ))}
       </div>

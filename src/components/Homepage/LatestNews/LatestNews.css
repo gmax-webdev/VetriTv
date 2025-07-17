@@ -79,4 +79,5 @@
 }
 .latest-news-item:hover {
   color: #006400;
+  text-decoration: underline;
 }
