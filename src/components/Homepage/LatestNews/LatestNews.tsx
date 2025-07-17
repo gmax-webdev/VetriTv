@@ -1,55 +1,61 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import React, { useEffect, useState } from 'react';
 import './LatestNews.css';
 
-type Post = {
+interface Post {
   id: number;
   title: string;
-  content: string;
-  featured_image: string;
-  category: string;
-  created_at: string;
-};
+  slug: string;
+  featured_image: string | null;
+}
 
-export default function LatestNews() {
+const LatestNews: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('status', 'published')
-        .order('created_at', { ascending: false })
-        .limit(10);
-
-      if (!error) {
+    fetch('/api/latest-news')
+      .then((res) => res.json())
+      .then((data) => {
         setPosts(data);
-      } else {
-        console.error('Error fetching posts:', error.message);
-      }
-    };
-
-    fetchPosts();
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching latest news:', err);
+        setLoading(false);
+      });
   }, []);
 
+  if (loading) return <p>Loading latest news...</p>;
+
   return (
-    <div className="latest-news-section">
-      <h2>🕘 Latest News</h2>
-      <div className="latest-news-grid">
-        {posts.map((post) => (
-          <div key={post.id} className="news-card">
-            {post.featured_image && (
-              <img src={post.featured_image} alt={post.title} className="news-image" />
-            )}
-            <h3>{post.title}</h3>
-            <p className="category">{post.category}</p>
-            <p className="content">{post.content.slice(0, 100)}...</p>
-          </div>
-        ))}
+    <div className="latest-news">
+      <h2>Latest News</h2>
+      <div className="latest-news-list">
+        {posts.length === 0 && <p>No latest news found.</p>}
+        {posts.map((post) => {
+            const postUrl = `https://vettritv.lk/${post.slug}`;
+          return (
+            <a
+              key={post.id}
+              href={postUrl}
+              className="latest-news-item"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {post.featured_image ? (
+                <img src={post.featured_image} alt={post.title} />
+              ) : (
+                <div className="no-image">No Image</div>
+              )}
+              <p>{post.title}</p>
+            </a>
+          );
+        })}
       </div>
     </div>
   );
-}
+};
+
+export default LatestNews;

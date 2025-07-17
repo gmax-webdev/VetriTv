@@ -28,6 +28,7 @@ const LatestVideo = () => {
 
   return (
     <div className="latest-video-section">
+      <h1>VETTRI TV</h1>
       <div className="video-thumbnail">
         <iframe
           src={`https://www.youtube.com/embed/${video.videoId}`}

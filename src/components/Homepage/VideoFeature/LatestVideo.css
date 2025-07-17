@@ -4,6 +4,13 @@
   overflow: hidden;
   margin-bottom: 20px;
 }
+.latest-video-section h1 {
+  display: flex;         /* Needed for align-items to work */
+  align-items: center;   /* Vertically aligns content if in a flex container */
+  font-size: 24px;       /* ✅ Add unit (px) */
+  color: maroon;
+  margin-left: 170px;
+}
 
 .video-thumbnail iframe {
   width: 100%;
