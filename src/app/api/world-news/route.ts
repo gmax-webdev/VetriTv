@@ -10,7 +10,7 @@ export async function GET() {
     .select('*')
     .eq('category', 'World News')   // Adjust category filter here
     .order('created_at', { ascending: false })
-    .limit(6);
+    .limit(10);
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });

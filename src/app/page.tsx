@@ -5,7 +5,7 @@ export default function HomePage() {
     <main>
        
       <LayoutWrapper />
- 
+    
     </main>
   );
 }
