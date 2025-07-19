@@ -10,6 +10,7 @@ import Footer from './Footer/Footer';
 import YouTubeShorts from '@/components/Homepage/YouTubeShorts/YouTubeShorts';
 import LocalAndPoliticalLayout from '@/components/Homepage/LocalAndPoliticalNews/LocalAndPoliticalLayout';
 import SportsSection from '@/components/Homepage/SportsNews/SportsSection'; 
+import CinemaNews from '@/components/Homepage/CinemaNews/CinemaNews';
 
 const LayoutClient = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -31,6 +32,7 @@ const LayoutClient = ({ children }: { children: React.ReactNode }) => {
           {isHome && <YouTubeShorts />}
           {isHome && <LocalAndPoliticalLayout />}
           {isHome && <SportsSection />}
+          {isHome && <CinemaNews/>}
           <Footer />
         </div>
       </div>

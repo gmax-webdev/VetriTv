@@ -21,6 +21,7 @@ const navItems = [
       'Science',
       'Technology',
       'Cinema',
+      'medical',
     ],
   },
 ];

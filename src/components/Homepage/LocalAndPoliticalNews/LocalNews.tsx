@@ -26,25 +26,47 @@ const LocalNews: React.FC = () => {
   const [main, ...rest] = posts;
 
   return (
-    <div className="news-section left-news">
+    <div className="news-section">
       <h2 className="section-title">Local News</h2>
+
       <div className="main-feature">
-        {main.featured_image ? (
-          <img src={main.featured_image} alt={main.title} />
-        ) : (
-          <div className="no-image-placeholder">No Image</div>
-        )}
-        <h3>{main.title}</h3>
+        <div className="image-container">
+          {main.featured_image ? (
+            <img src={main.featured_image} alt={main.title} className="featured-image" />
+          ) : (
+            <div className="no-image-placeholder">No Image</div>
+          )}
+        </div>
+        <h3 className="feature-title">
+          <a 
+            href={`https://vettritv.lk/${main.slug}`} 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            {main.title}
+          </a>
+        </h3>
       </div>
+
       <div className="sub-grid">
         {rest.map(post => (
           <div key={post.id} className="sub-post">
-            {post.featured_image ? (
-              <img src={post.featured_image} alt={post.title} />
-            ) : (
-              <div className="no-image-placeholder">No Image</div>
-            )}
-            <p>{post.title}</p>
+            <div className="image-container">
+              {post.featured_image ? (
+                <img src={post.featured_image} alt={post.title} className="featured-image" />
+              ) : (
+                <div className="no-image-placeholder">No Image</div>
+              )}
+            </div>
+            <p className="post-title">
+              <a 
+                href={`https://vettritv.lk/${post.slug}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                {post.title}
+              </a>
+            </p>
           </div>
         ))}
       </div>

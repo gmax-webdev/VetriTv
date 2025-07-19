@@ -1,0 +1,40 @@
+.local-page {
+  padding: 2rem 1rem;
+}
+
+.local-page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #106b01;
+  border-bottom: 3px solid #ffff7b;
+  margin-bottom: 1.5rem;
+}
+
+.local-page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.local-page-card {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.local-page-card:hover {
+  transform: translateY(-3px);
+}
+
+.local-page-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.local-page-headline {
+  margin-top: 0.6rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}

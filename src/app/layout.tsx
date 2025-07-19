@@ -11,7 +11,7 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: 'Vetri TV',
+  title: 'Vettri TV',
   description: 'Latest trusted news',
 };
 
