@@ -29,9 +29,17 @@ const LayoutClient = ({ children }: { children: React.ReactNode }) => {
           <main className="page-content">{children}</main>
 
           {/* ✅ Show only on homepage */}
-          {isHome && <YouTubeShorts />}
+        {isHome && (
+            <div className="section-divider-top">
+               <YouTubeShorts />
+            </div>
+        )}
           {isHome && <LocalAndPoliticalLayout />}
-          {isHome && <SportsSection />}
+          {isHome && (
+            <div className="section-divider-top">
+               <SportsSection />
+            </div>
+        )}
           {isHome && <CinemaNews/>}
           <Footer />
         </div>
@@ -41,3 +49,4 @@ const LayoutClient = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default LayoutClient;
+

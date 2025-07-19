@@ -1,6 +1,5 @@
 .world-news {
-  padding: 10px;
-  background-color: #fff;
+  /* padding: 1rem; */
 }
 
 .world-news h2 {
@@ -8,22 +7,24 @@
   margin-bottom: 10px;
   color: #006400; /* Brand green */
   border-bottom: 2px solid #006400;
-  padding-bottom: 4px;
+  font-weight: bold;
+  padding-top: 15px;
 }
 
 .world-news-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
 }
 
 .world-news-item {
   display: flex;
-  gap: 10px;
-  align-items: flex-start;
+  gap: 1rem;
+  align-items: center;
   text-decoration: none;
   color: #000;
-  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
   transition: color 0.2s ease;
 }
 
@@ -34,44 +35,34 @@
 
 .world-news-item img {
   width: 80px;
-  height: 60px;
+  height: 70px;
   object-fit: cover;
-  border-radius: 4px;
-  flex-shrink: 0;
+  border-radius: 6px;
 }
 
 .world-news-item p {
-  margin: 0;
-  font-size: 14px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* Show only 2 lines */
-  -webkit-box-orient: vertical;
+  flex: 1;
+  font-weight: 700;
+  font-size: 12px;
 }
 
-@media screen and (max-width: 768px) {
-  .world-news {
-    padding: 8px;
-  }
-
-  .world-news h2 {
-    font-size: 18px;
-  }
-
- .world-news-item {
+.no-image-placeholder {
+  width: 100px;
+  height: 80px;
+  background-color: #ccc;
+  border-radius: 6px;
   display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  text-decoration: none;
-  color: #000;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 0.9rem;
 }
 
-.world-news-item:hover {
-  color: #006400;
-}
-
+@media (max-width: 768px) {
+  .world-news-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   .world-news-item img {
     width: 100%;
@@ -79,16 +70,16 @@
   }
 
   .world-news-item p {
-    font-size: 16px;
+    font-size: 1rem;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media (max-width: 480px) {
   .world-news h2 {
-    font-size: 16px;
+    font-size: 1.2rem;
   }
 
   .world-news-item p {
-    font-size: 13px;
+    font-size: 0.95rem;
   }
 }

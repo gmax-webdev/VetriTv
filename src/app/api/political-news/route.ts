@@ -13,7 +13,7 @@ export async function GET() {
       .select('*')
       .eq('category', 'இலங்கை அரசியல்') // ✅ match your category name
       .order('created_at', { ascending: false })
-      .limit(4);
+      .limit(5);
 
     if (error) throw error;
 

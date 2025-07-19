@@ -1,10 +1,12 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 import './LocalAndPoliticalNews.css';
 
 interface Post {
   id: number;
   title: string;
+  slug: string; // ✅ Added
   featured_image: string;
 }
 
@@ -25,6 +27,7 @@ const PoliticalNews = () => {
   return (
     <div className="news-section">
       <h2 className="section-title">Political News</h2>
+
       <div className="main-feature">
         <div className="image-container">
           {main.featured_image ? (
@@ -33,8 +36,17 @@ const PoliticalNews = () => {
             <div className="no-image-placeholder">No Image</div>
           )}
         </div>
-        <h3 className="feature-title">{main.title}</h3>
+        <h3 className="feature-title">
+          <a
+            href={`https://vettritv.lk/${main.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {main.title}
+          </a>
+        </h3>
       </div>
+
       <div className="sub-grid">
         {rest.map(post => (
           <div key={post.id} className="sub-post">
@@ -45,7 +57,15 @@ const PoliticalNews = () => {
                 <div className="no-image-placeholder">No Image</div>
               )}
             </div>
-            <p className="post-title">{post.title}</p>
+            <p className="post-title">
+              <a
+                href={`https://vettritv.lk/${post.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {post.title}
+              </a>
+            </p>
           </div>
         ))}
       </div>

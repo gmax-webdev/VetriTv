@@ -21,6 +21,12 @@
   gap: 20px;
 }
 
+/* Al Jazeera-style vertical divider between LatestNews and WorldNews */
+.center-column {
+  border-right: 1px solid #e0e0e0; /* light gray border */
+  /* padding-right: 10px; */
+}
+
 /* Right column: World News */
 .right-column {
   display: flex;
@@ -40,3 +46,11 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  .center-column {
+    border-right: none;
+    padding-right: 0;
+  }
+}
+

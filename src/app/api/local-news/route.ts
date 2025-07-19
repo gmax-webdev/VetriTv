@@ -13,7 +13,7 @@ export async function GET() {
       .select('*')
       .eq('category', 'உள்நாட்டுச்செய்திகள்') // ✅ updated here
       .order('created_at', { ascending: false })
-      .limit(4);
+      .limit(5);
 
     if (error) throw error;
 

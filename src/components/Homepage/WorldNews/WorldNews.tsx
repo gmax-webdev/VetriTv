@@ -7,15 +7,14 @@ interface Post {
   id: number;
   title: string;
   slug: string;
-  featured_image: string;
-  category: string;
+  featured_image: string | null;
 }
 
 const WorldNews: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-       fetch('/api/world-news')
+    fetch('/api/world-news')
       .then(res => res.json())
       .then(data => setPosts(data))
       .catch(err => console.error('Error fetching world news:', err));
@@ -23,8 +22,9 @@ const WorldNews: React.FC = () => {
 
   return (
     <div className="world-news">
-      <h2> World News</h2>
+      <h2>World News</h2>
       <div className="world-news-list">
+        {posts.length === 0 && <p>No world news found.</p>}
         {posts.map(post => {
           const postUrl = `https://vettritv.lk/${post.slug}`;
           return (
