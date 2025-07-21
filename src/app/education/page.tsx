@@ -1,6 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
 import './education.css';
-import Link from 'next/link';
 
 interface Post {
   id: number;
@@ -10,8 +9,13 @@ interface Post {
   content: string;
 }
 
+// Clean HTML and limit excerpt
 function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, '').slice(0, 100) + '...';
+  return html
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .slice(0, 100)
+    .trim() + '...';
 }
 
 export default async function EducationPage() {
@@ -21,39 +25,53 @@ export default async function EducationPage() {
     .eq('category', 'கல்வி')
     .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error('Error fetching கல்வி posts:', error.message);
-    return <div>Error loading கல்வி news</div>;
-  }
-
-  if (!posts || posts.length === 0) {
-    return <div>⚠️ கல்வி பதிவுகள் இல்லை</div>;
+  if (error || !posts || posts.length === 0) {
+    return (
+      <p style={{ padding: '20px', textAlign: 'center' }}>
+        கல்வி செய்திகள் கிடைக்கவில்லை.
+      </p>
+    );
   }
 
   return (
-    <div className="education-list">
-      <h1 className="edu-section-title">📚 கல்வி செய்திகள்</h1>
-      <ul className="edu-news-list">
+    <div className="education-wrapper">
+      <div className="education-banner-wrapper">
+        <img
+          src="/Assets/education news 2.jpg" // ✅ Update this path to your actual banner
+          alt="Education Banner"
+          className="education-banner"
+        />
+        <div className="education-label">
+          <span className="orange-bar" />
+          <span>கல்வி</span>
+        </div>
+      </div>
+
+      <div className="education-all-section">
         {posts.map((post) => (
-          <li key={post.id} className="edu-news-item">
+          <div key={post.id} className="education-news-item">
             {post.featured_image && (
-              <Link href={`/education/${post.slug}`}>
-                <img
-                  src={post.featured_image}
-                  alt={post.title}
-                  className="edu-news-thumbnail"
-                />
-              </Link>
+              <img
+                src={post.featured_image}
+                alt={post.title}
+                className="education-news-image"
+              />
             )}
-            <div className="edu-news-content">
-              <h2 className="edu-news-title">
-                <Link href={`/education/${post.slug}`}>{post.title}</Link>
-              </h2>
-              <p className="edu-news-excerpt">{stripHtml(post.content)}</p>
+            <div className="education-news-content">
+              <h3>
+                <a
+                  href={`https://vettritv.lk/${post.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {post.title}
+                </a>
+              </h3>
+              <p>{stripHtml(post.content)}</p>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

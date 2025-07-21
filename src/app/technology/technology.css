@@ -1,40 +1,109 @@
-.technology-page {
-  padding: 2rem 1rem;
+.technology-wrapper {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.technology-page-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #106b01;
-  border-bottom: 3px solid #ffff7b;
-  margin-bottom: 1.5rem;
+.technology-banner-wrapper {
+  position: relative;
 }
 
-.technology-page-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-}
-
-.technology-page-card {
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.2s ease;
-}
-
-.technology-page-card:hover {
-  transform: translateY(-3px);
-}
-
-.technology-page-img {
+.technology-banner {
   width: 100%;
-  height: 160px;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.technology-label {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+}
+
+.orange-bar {
+  width: 6px;
+  height: 24px;
+  background: orange;
+  margin-right: 10px;
+  border-radius: 3px;
+}
+
+.technology-all-section {
+  background: white;
+  position: relative;
+  z-index: 10;
+  margin-top: -30px;
+  padding: 30px 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.technology-news-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.technology-news-image {
+  width: 250px;
+  height: 150px;
   object-fit: cover;
   border-radius: 10px;
+  flex-shrink: 0;
 }
 
-.technology-page-headline {
-  margin-top: 0.6rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+.technology-news-content {
+  flex: 1;
+}
+
+.technology-news-content h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #000;
+}
+
+.technology-news-content h3 a {
+  text-decoration: none;
+  color: #000;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.technology-news-content h3 a:hover {
+  color: #106b01; /* Green hover */
+  border-bottom: 2px solid #106b01;
+}
+
+@media (max-width: 768px) {
+  .technology-news-item {
+    flex-direction: column;
+  }
+
+  .technology-news-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .technology-label {
+    font-size: 18px;
+  }
+
+  .technology-all-section {
+    margin-top: -60px;
+    padding: 20px;
+  }
 }

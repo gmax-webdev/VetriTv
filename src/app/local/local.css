@@ -1,40 +1,115 @@
-.local-page {
-  padding: 2rem 1rem;
+.local-wrapper {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.local-page-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #106b01;
-  border-bottom: 3px solid #ffff7b;
-  margin-bottom: 1.5rem;
+.local-banner-wrapper {
+  position: relative;
 }
 
-.local-page-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-}
-
-.local-page-card {
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.2s ease;
-}
-
-.local-page-card:hover {
-  transform: translateY(-3px);
-}
-
-.local-page-img {
+.local-banner {
   width: 100%;
-  height: 160px;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.local-label {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+}
+
+.orange-bar {
+  width: 6px;
+  height: 24px;
+  background: orange;
+  margin-right: 10px;
+  border-radius: 3px;
+}
+
+.local-all-section {
+  background: white;
+  position: relative;
+  z-index: 10;
+  margin-top: -30px;
+  padding: 30px 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.local-news-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.local-news-item img {
+  width: 250px;
+  height: 150px;
   object-fit: cover;
   border-radius: 10px;
+  flex-shrink: 0;
 }
 
-.local-page-headline {
-  margin-top: 0.6rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+.local-news-content {
+  flex: 1;
+}
+
+.local-news-content h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #000;
+}
+
+.local-news-content p {
+  font-size: 14px;
+  color: #555;
+  text-align: justify;
+}
+
+.local-news-content h3 a {
+  text-decoration: none;
+  color: #000;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.local-news-content h3 a:hover {
+  color: #106b01;
+  border-bottom: 2px solid #106b01;
+}
+
+@media (max-width: 768px) {
+  .local-news-item {
+    flex-direction: column;
+  }
+
+  .local-news-item img {
+    width: 100%;
+    height: auto;
+  }
+
+  .local-label {
+    font-size: 18px;
+  }
+
+  .local-all-section {
+    margin-top: -60px;
+    padding: 20px;
+  }
 }

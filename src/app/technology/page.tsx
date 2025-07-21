@@ -1,5 +1,4 @@
 import { supabase } from '@/lib/supabaseClient';
-import Link from 'next/link';
 import './technology.css';
 
 interface Post {
@@ -17,30 +16,52 @@ export default async function TechnologyPage() {
     .eq('category', 'Technology')
     .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error('Technology fetch error:', error);
-    return <p>டெக்னாலஜி செய்திகள் ஏற்கனவே கிடைக்கவில்லை.</p>;
+  if (error || !posts || posts.length === 0) {
+    return (
+      <p style={{ padding: '20px', textAlign: 'center' }}>
+        டெக்னாலஜி செய்திகள் இல்லை.
+      </p>
+    );
   }
 
   return (
-    <main className="technology-page">
-      <h1 className="technology-page-title">🖥️ Technology News</h1>
-      <div className="technology-page-grid">
-        {posts?.map((post) => (
-          <Link
-            key={post.id}
-            href={`https://vettritv.lk/${post.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="technology-page-card"
-          >
+    <div className="technology-wrapper">
+      <div className="technology-banner-wrapper">
+        <img
+          src="/Assets/technology news1.jpg" // ✅ Update path to your tech banner
+          alt="Technology Banner"
+          className="technology-banner"
+        />
+        <div className="technology-label">
+          <span className="orange-bar" />
+          <span>Technology</span>
+        </div>
+      </div>
+
+      <div className="technology-all-section">
+        {posts.map((post) => (
+          <div key={post.id} className="technology-news-item">
             {post.featured_image && (
-              <img src={post.featured_image} alt={post.title} className="technology-page-img" />
+              <img
+                src={post.featured_image}
+                alt={post.title}
+                className="technology-news-image"
+              />
             )}
-            <h3 className="technology-page-headline">{post.title}</h3>
-          </Link>
+            <div className="technology-news-content">
+              <h3>
+                <a
+                  href={`https://vettritv.lk/${post.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {post.title}
+                </a>
+              </h3>
+            </div>
+          </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

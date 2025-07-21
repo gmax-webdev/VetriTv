@@ -1,5 +1,4 @@
 import { supabase } from '@/lib/supabaseClient';
-import Link from 'next/link';
 import './medical.css';
 
 interface Post {
@@ -17,30 +16,52 @@ export default async function MedicalPage() {
     .eq('category', 'மருத்துவம்')
     .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error('Medical fetch error:', error);
-    return <p>மருத்துவம் செய்திகள் ஏற்கனவே கிடைக்கவில்லை.</p>;
+  if (error || !posts || posts.length === 0) {
+    return (
+      <p style={{ padding: '20px', textAlign: 'center' }}>
+        மருத்துவம் செய்திகள் இல்லை.
+      </p>
+    );
   }
 
   return (
-    <main className="medical-page">
-      <h1 className="medical-page-title">🩺 மருத்துவம் செய்திகள்</h1>
-      <div className="medical-page-grid">
-        {posts?.map((post) => (
-          <Link
-            key={post.id}
-            href={`https://vettritv.lk/${post.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="medical-page-card"
-          >
+    <div className="medical-wrapper">
+      <div className="medical-banner-wrapper">
+        <img
+          src="/Assets/medical.webp" // ✅ Replace with your actual banner image path
+          alt="Medical Banner"
+          className="medical-banner"
+        />
+        <div className="medical-label">
+          <span className="orange-bar" />
+          <span>மருத்துவம்</span>
+        </div>
+      </div>
+
+      <div className="medical-all-section">
+        {posts.map((post) => (
+          <div key={post.id} className="medical-news-item">
             {post.featured_image && (
-              <img src={post.featured_image} alt={post.title} className="medical-page-img" />
+              <img
+                src={post.featured_image}
+                alt={post.title}
+                className="medical-news-image"
+              />
             )}
-            <h3 className="medical-page-headline">{post.title}</h3>
-          </Link>
+            <div className="medical-news-content">
+              <h3>
+                <a
+                  href={`https://vettritv.lk/${post.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {post.title}
+                </a>
+              </h3>
+            </div>
+          </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }
