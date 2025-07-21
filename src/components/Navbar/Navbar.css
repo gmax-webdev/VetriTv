@@ -3,6 +3,8 @@
   background-color: #fff;
   border-bottom: 1px solid #e0e0e0;
   padding: 0.75rem 0;
+  position: relative; 
+  z-index: 9999; 
 }
 
 .navbar-container {
@@ -56,6 +58,7 @@
 
 .nav-item:hover .dropdown {
   display: flex;
+  
 }
 
 .dropdown-link {

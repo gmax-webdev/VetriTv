@@ -1,31 +1,39 @@
-import { supabase } from '@/lib/supabaseClient';
-import { notFound } from 'next/navigation';
+// import { supabase } from '@/lib/supabaseClient';
+// import { notFound } from 'next/navigation';
+// import styles from './SportsSection.module.css';
 
-interface Props {
-  params: { id: string };
-}
+// interface Props {
+//   params: { id: string };
+// }
 
-export default async function SportsNewsDetail({ params }: Props) {
-  const { data: post, error } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('id', params.id)
-    .single();
+// export default async function SportsNewsDetail({ params }: Props) {
+//   const { data: post, error } = await supabase
+//     .from('posts')
+//     .select('*')
+//     .eq('id', params.id)
+//     .single();
 
-  if (!post || error) return notFound();
+//   if (!post || error) return notFound();
 
-  return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px' }}>
-      <img
-        src={post.featured_image}
-        alt="Featured"
-        style={{ width: '100%', borderRadius: '10px', marginBottom: '20px' }}
-      />
-      <h1 style={{ fontSize: '24px', marginBottom: '10px' }}>{post.title}</h1>
-      <div
-        style={{ fontSize: '16px', color: '#444' }}
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      ></div>
-    </div>
-  );
-}
+//   return (
+//     <div className={styles.sportsSection}>
+//       {/* Banner Background */}
+//       <div className={styles.bannerContainer}>
+//         <img
+//           src={post.featured_image}
+//           alt="Featured"
+//           className={styles.bannerImage}
+//         />
+//       </div>
+
+//       {/* Floating Content Card */}
+//       <div className={styles.contentBox}>
+//         <h1 className={styles.heading}>{post.title}</h1>
+//         <div
+//           className={styles.postContent}
+//           dangerouslySetInnerHTML={{ __html: post.content }}
+//         ></div>
+//       </div>
+//     </div>
+//   );
+// }

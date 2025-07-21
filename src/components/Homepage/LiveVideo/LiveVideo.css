@@ -89,3 +89,8 @@
   line-height: 1.3;
   color: #111;
 }
+
+.video-meta-title:hover {
+  text-decoration: underline;  /* Show underline on hover */
+  color:#006400;   
+}

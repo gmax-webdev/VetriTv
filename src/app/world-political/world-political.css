@@ -1,46 +1,118 @@
-.worldpolitical-page {
-  padding: 2rem 1rem;
+.worldpolitical-wrapper {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.worldpolitical-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #900f0f;
-  border-bottom: 3px solid #ffff7b;
-  margin-bottom: 1.5rem;
+.worldpolitical-banner-wrapper {
+  position: relative;
 }
 
-.worldpolitical-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-}
-
-.worldpolitical-card {
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.2s ease;
-}
-
-.worldpolitical-card:hover {
-  transform: translateY(-3px);
-}
-
-.worldpolitical-img {
+.worldpolitical-banner {
   width: 100%;
-  height: 160px;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.worldpolitical-label {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+}
+
+.orange-bar {
+  width: 6px;
+  height: 24px;
+  background: orange;
+  margin-right: 10px;
+  border-radius: 3px;
+}
+
+.worldpolitical-all-section {
+  background: white;
+  position: relative;
+  z-index: 10;
+  margin-top: -30px;
+  padding: 30px 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.worldpolitical-news-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.worldpolitical-news-image {
+  width: 250px;
+  height: 150px;
   object-fit: cover;
   border-radius: 10px;
+  flex-shrink: 0;
 }
 
-.worldpolitical-headline {
-  margin-top: 0.6rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+.worldpolitical-news-content {
+  flex: 1;
 }
 
-.worldpolitical-headline:hover {
-   color: #006400;
-  text-decoration: underline;
+.worldpolitical-news-content h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #000;
+}
 
+.worldpolitical-news-content p {
+  font-size: 14px;
+  color: #555;
+  text-align: justify;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .worldpolitical-news-item {
+    flex-direction: column;
+  }
+
+  .worldpolitical-news-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .worldpolitical-label {
+    font-size: 18px;
+  }
+
+  .worldpolitical-all-section {
+    margin-top: -60px;
+    padding: 20px;
+  }
+}
+
+/* Link style */
+.worldpolitical-news-content h3 a {
+  text-decoration: none;
+  color: #000;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+/* Hover effect: green underline + green text */
+.worldpolitical-news-content h3 a:hover {
+  color: #106b01;
+  border-bottom: 2px solid #106b01;
 }

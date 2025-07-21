@@ -1,5 +1,4 @@
 import { supabase } from '@/lib/supabaseClient';
-import Link from 'next/link';
 import './political.css';
 
 interface Post {
@@ -7,40 +6,74 @@ interface Post {
   title: string;
   slug: string;
   featured_image: string | null;
+  excerpt: string | null;
   created_at: string;
+}
+
+// Remove HTML tags and inline styles from excerpt
+function stripHtml(html: string | null) {
+  if (!html) return '';
+  return html
+    .replace(/style="[^"]*"/g, '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
 }
 
 export default async function PoliticalPage() {
   const { data: posts, error } = await supabase
     .from('posts')
-    .select('id, title, slug, featured_image, created_at')
+    .select('*')
     .eq('category', 'இலங்கை அரசியல்')
     .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error('Political fetch error:', error);
-    return <p>இலங்கை அரசியல் செய்திகள் இல்லை.</p>;
+  if (error || !posts || posts.length === 0) {
+    return (
+      <p style={{ padding: '20px', textAlign: 'center' }}>
+        இலங்கை அரசியல் செய்திகள் இல்லை.
+      </p>
+    );
   }
 
   return (
-    <main className="political-page">
-      <h1 className="political-page-title">🗳️ இலங்கை அரசியல் செய்திகள்</h1>
-      <div className="political-page-grid">
-        {posts?.map((post) => (
-          <Link
-            key={post.id}
-            href={`https://vettritv.lk/${post.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="political-page-card"
-          >
+    <div className="political-wrapper">
+      <div className="political-banner-wrapper">
+        <img
+          src="/Assets/political_news.webp" // Replace with your banner image path
+          alt="Political Banner"
+          className="political-banner"
+        />
+        <div className="political-label">
+          <span className="orange-bar" />
+          <span>இலங்கை அரசியல்</span>
+        </div>
+      </div>
+
+      <div className="political-all-section">
+        {posts.map((post) => (
+          <div key={post.id} className="political-news-item">
             {post.featured_image && (
-              <img src={post.featured_image} alt={post.title} className="political-page-img" />
+              <img
+                src={post.featured_image}
+                alt={post.title}
+                className="political-news-image"
+              />
             )}
-            <h3 className="political-page-headline">{post.title}</h3>
-          </Link>
+            <div className="political-news-content">
+              <h3>
+                <a
+                  href={`https://vettritv.lk/${post.slug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {post.title}
+                </a>
+              </h3>
+              <p>{stripHtml(post.excerpt)}</p>
+            </div>
+          </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

@@ -8,7 +8,7 @@ interface Post {
   title: string;
   excerpt: string;
   featured_image: string;
-  slug: string; // Add slug
+  slug: string;
 }
 
 const SPORTS_API = '/api/sports-news';
@@ -19,23 +19,12 @@ function stripHtml(html: string) {
 
 const SportsSection = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    checkIfMobile();
-    window.addEventListener('resize', checkIfMobile);
-    return () => window.removeEventListener('resize', checkIfMobile);
-  }, []);
 
   useEffect(() => {
     fetch(SPORTS_API)
-      .then(res => res.json())
-      .then(data => setPosts(data))
-      .catch(err => console.error('Error fetching sports posts:', err));
+      .then((res) => res.json())
+      .then((data) => setPosts(data))
+      .catch((err) => console.error('Error fetching sports posts:', err));
   }, []);
 
   if (posts.length === 0) return null;
@@ -44,12 +33,12 @@ const SportsSection = () => {
 
   return (
     <div className="sports-wrapper">
+      {/* Banner */}
       <div className="sports-banner-wrapper">
-        <img 
-          src="/Assets/sports.jpg" 
-          alt="Sports Banner" 
-          className="sports-banner" 
-          loading="lazy"
+        <img
+          src="/Assets/sports.jpg"
+          alt="Sports Banner"
+          className="sports-banner"
         />
         <div className="sports-label">
           <span className="orange-bar" />
@@ -57,55 +46,41 @@ const SportsSection = () => {
         </div>
       </div>
 
-      <div className="sports-section">
-        <div className="sports-left">
-          <img 
-            src={mainPost.featured_image} 
-            alt="Main Sport" 
-            loading="lazy"
-          />
-          <h3>
-            <a 
-              href={`https://vettritv.lk/${mainPost.slug}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              {mainPost.title}
-            </a>
-          </h3>
-          <p className="excerpt">{stripHtml(mainPost.excerpt)}</p>
+      {/* Floating Content Card */}
+      <div className="sports-content-card">
+        <div className="sports-section">
+          {/* Left Side - Main Post */}
+          <div className="sports-left">
+            <img src={mainPost.featured_image} alt="Main Sport" />
+            <h3>
+              <a href={`https://vettritv.lk/${mainPost.slug}`} target="_blank" rel="noopener noreferrer">
+                {mainPost.title}
+              </a>
+            </h3>
+            <p className="excerpt">{stripHtml(mainPost.excerpt)}</p>
+          </div>
+
+          {/* Right Side - Small Posts */}
+          <div className="sports-right">
+            {sidePosts.map((post) => (
+              <div className="sports-right-item" key={post.id}>
+                <img src={post.featured_image} alt={post.title} />
+                <p>
+                  <a href={`https://vettritv.lk/${post.slug}`} target="_blank" rel="noopener noreferrer">
+                    {post.title}
+                  </a>
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="sports-right">
-          {sidePosts.map(post => (
-            <div className="sports-right-item" key={post.id}>
-              <img 
-                src={post.featured_image} 
-                alt="Side Sport" 
-                loading="lazy"
-              />
-              <p>
-                <a 
-                  href={`https://vettritv.lk/${post.slug}`} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  {post.title}
-                </a>
-              </p>
-            </div>
-          ))}
+        {/* Bottom link */}
+        <div className="sports-footer">
+          <a href="https://vettritv.lk/category/sports/" target="_blank" rel="noopener noreferrer">
+            See full coverage
+          </a>
         </div>
-      </div>
-
-      <div className="sports-footer">
-        <a
-          href="https://vettritv.lk/category/sports/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          See full coverage
-        </a>
       </div>
     </div>
   );

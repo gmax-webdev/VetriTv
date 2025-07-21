@@ -9,8 +9,20 @@ interface Post {
   excerpt: string;
 }
 
-function stripHtml(html: string) {
-  return html.replace(/<[^>]+>/g, '');
+function stripHtml(html: string | null): string {
+  if (!html) return '';
+  const withoutTags = html
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')  // remove <style> blocks
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // remove <script> blocks
+    .replace(/<\/?[^>]+(>|$)/g, '')                  // remove all remaining tags
+    .replace(/&nbsp;/gi, ' ')                        // decode common entities
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\s{2,}/g, ' ')                         // collapse spaces
+    .trim();
+
+  return withoutTags;
 }
 
 export default async function SportsPage() {

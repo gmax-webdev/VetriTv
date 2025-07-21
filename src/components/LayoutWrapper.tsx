@@ -11,6 +11,7 @@ import YouTubeShorts from '@/components/Homepage/YouTubeShorts/YouTubeShorts';
 import LocalAndPoliticalLayout from '@/components/Homepage/LocalAndPoliticalNews/LocalAndPoliticalLayout';
 import SportsSection from '@/components/Homepage/SportsNews/SportsSection'; 
 import CinemaNews from '@/components/Homepage/CinemaNews/CinemaNews';
+import '@/globals.css';
 
 const LayoutClient = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();

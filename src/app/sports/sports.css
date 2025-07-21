@@ -1,33 +1,34 @@
-/* sports.css */
+/* New base wrapper with positioning */
 .sports-wrapper {
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: relative;
   max-width: 1000px;
+  margin: 0 auto;
 }
 
+/* Banner styles remain */
 .sports-banner-wrapper {
   position: relative;
 }
 
 .sports-banner {
   width: 100%;
-  height: 250px;
+  height: 300px;
   object-fit: cover;
   display: block;
+  border-radius: 12px;
 }
 
+/* Label stays as-is */
 .sports-label {
   position: absolute;
-  bottom: 15px;
+  bottom:50px;
   left: 20px;
   display: flex;
   align-items: center;
   color: white;
   font-size: 24px;
   font-weight: bold;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
 }
 
 .orange-bar {
@@ -38,13 +39,23 @@
   border-radius: 3px;
 }
 
+/* Float card over the banner */
 .sports-all-section {
-  padding: 20px;
+  background: white;
+  position: relative;
+  z-index: 10;
+  margin-top: -30px;
+  padding: 30px 20px;
+  margin-left:20px ;
+  margin-right: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
+/* Content inside each news item */
 .sports-news-item {
   display: flex;
   gap: 20px;
@@ -65,7 +76,7 @@
 }
 
 .sports-news-content h3 {
-  font-size: 20px;
+  font-size: 16px;
   margin-bottom: 8px;
   color: #000;
 }
@@ -76,7 +87,7 @@
   text-align: justify;
 }
 
-/* Responsive */
+/* Responsive tweaks */
 @media (max-width: 768px) {
   .sports-news-item {
     flex-direction: column;
@@ -90,4 +101,23 @@
   .sports-label {
     font-size: 18px;
   }
+
+  .sports-all-section {
+    margin-top: -60px;
+    padding: 20px;
+  }
+}
+
+/* Style the link inside the sports-news-content */
+.sports-news-content h3 a {
+  text-decoration: none;
+  color: #000; /* Default color */
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+/* Hover effect: green underline + green text */
+.sports-news-content h3 a:hover {
+  color: #106b01; /* Your brand green */
+  border-bottom: 2px solid #106b01;
 }

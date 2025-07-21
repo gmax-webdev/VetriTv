@@ -1,6 +1,6 @@
 // src/app/main-news/page.tsx
 import React from 'react';
-import MainNewsPosts from '@/components/Homepage/MainNews/MainNewsPosts';
+import MainNewsPosts from '@/components/Homepage/MainNews/MainNewsVideos';
 
 export default function MainNewsPage() {
   return (
