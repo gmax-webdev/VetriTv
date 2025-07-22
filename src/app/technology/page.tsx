@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
+import Link from 'next/link';
 import './technology.css';
 
 interface Post {
@@ -19,7 +20,7 @@ export default async function TechnologyPage() {
   if (error || !posts || posts.length === 0) {
     return (
       <p style={{ padding: '20px', textAlign: 'center' }}>
-        டெக்னாலஜி செய்திகள் இல்லை.
+        No technology News .
       </p>
     );
   }
@@ -28,7 +29,7 @@ export default async function TechnologyPage() {
     <div className="technology-wrapper">
       <div className="technology-banner-wrapper">
         <img
-          src="/Assets/technology news1.jpg" // ✅ Update path to your tech banner
+          src="/Assets/technology news1.jpg"
           alt="Technology Banner"
           className="technology-banner"
         />
@@ -50,13 +51,9 @@ export default async function TechnologyPage() {
             )}
             <div className="technology-news-content">
               <h3>
-                <a
-                  href={`https://vettritv.lk/${post.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href={`/news/${post.id}`}>
                   {post.title}
-                </a>
+                </Link>
               </h3>
             </div>
           </div>

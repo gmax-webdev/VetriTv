@@ -1,5 +1,5 @@
-// local/page.tsx
 import { supabase } from '@/lib/supabaseClient';
+import Link from 'next/link'; // ✅ Import Link for internal routing
 import './local.css';
 
 interface Post {
@@ -10,6 +10,7 @@ interface Post {
   excerpt?: string;
 }
 
+// ✅ Clean HTML from excerpt
 function stripHtml(html: string | null): string {
   if (!html) return '';
   const withoutTags = html
@@ -55,17 +56,15 @@ export default async function LocalPage() {
         {posts.map((post) => (
           <div key={post.id} className="local-news-item">
             {post.featured_image && (
-              <img src={post.featured_image} alt={post.title} />
+              <Link href={`/news/${post.id}`}>
+                <img src={post.featured_image} alt={post.title} />
+              </Link>
             )}
             <div className="local-news-content">
               <h3>
-                <a
-                  href={`https://vettritv.lk/${post.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href={`/news/${post.id}`}>
                   {post.title}
-                </a>
+                </Link>
               </h3>
               <p>{stripHtml(post.excerpt ?? '')}</p>
             </div>

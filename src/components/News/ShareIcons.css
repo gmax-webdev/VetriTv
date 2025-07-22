@@ -1,0 +1,83 @@
+.share-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.icon-button svg {
+  font-size: 18px;
+}
+
+.icon-button .label-text {
+  white-space: nowrap;
+}
+
+.icon-button.fb {
+  background-color: #1877f2;
+}
+
+.icon-button.fb:hover {
+  background-color: #145dbf;
+   transform: scale(1.05);
+}
+
+.icon-button.tw {
+  background-color: #1da1f2;
+}
+
+.icon-button.tw:hover {
+  background-color: #178fdd;
+   transform: scale(1.05);
+}
+
+.icon-button.wa {
+  background-color: #25d366;
+  color: #fff;
+}
+
+.icon-button.wa:hover {
+  background-color: #1aa94d;
+   transform: scale(1.05);
+}
+
+.icon-button.tg {
+  background-color: #0088cc;
+}
+
+.icon-button.tg:hover {
+  background-color: #006fa3;
+   transform: scale(1.05);
+}
+
+.icon-button.copy {
+  background-color: #6c757d;
+}
+
+.icon-button.copy:hover {
+  background-color: #5a6268;
+   transform: scale(1.05);
+}
+
+.copy-feedback {
+  width: 100%;
+  margin-top: 8px;
+  color: green;
+  font-size: 14px;
+}
+

@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
+import Link from 'next/link';
 import './world-political.css';
 
 interface Post {
@@ -34,7 +35,7 @@ export default async function WorldPoliticalPage() {
     <div className="worldpolitical-wrapper">
       <div className="worldpolitical-banner-wrapper">
         <img
-          src="/Assets/"
+          src="/Assets/your-banner-image.jpg" // update this path as needed
           alt="World Politics Banner"
           className="worldpolitical-banner"
         />
@@ -56,13 +57,9 @@ export default async function WorldPoliticalPage() {
             )}
             <div className="worldpolitical-news-content">
               <h3>
-                <a
-                  href={`https://vettritv.lk/${post.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href={`/news/${post.id}`}>
                   {post.title}
-                </a>
+                </Link>
               </h3>
               <p>{stripHtml(post.excerpt)}</p>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link'; // <-- Import Link here
 import './SportsSection.css';
 
 interface Post {
@@ -53,9 +54,9 @@ const SportsSection = () => {
           <div className="sports-left">
             <img src={mainPost.featured_image} alt="Main Sport" />
             <h3>
-              <a href={`https://vettritv.lk/${mainPost.slug}`} target="_blank" rel="noopener noreferrer">
+              <Link href={`/news/${mainPost.id}`} className="main-post-link">
                 {mainPost.title}
-              </a>
+              </Link>
             </h3>
             <p className="excerpt">{stripHtml(mainPost.excerpt)}</p>
           </div>
@@ -66,9 +67,9 @@ const SportsSection = () => {
               <div className="sports-right-item" key={post.id}>
                 <img src={post.featured_image} alt={post.title} />
                 <p>
-                  <a href={`https://vettritv.lk/${post.slug}`} target="_blank" rel="noopener noreferrer">
+                  <Link href={`/news/${post.id}`} className="side-post-link">
                     {post.title}
-                  </a>
+                  </Link>
                 </p>
               </div>
             ))}
@@ -77,9 +78,9 @@ const SportsSection = () => {
 
         {/* Bottom link */}
         <div className="sports-footer">
-          <a href="https://vettritv.lk/category/sports/" target="_blank" rel="noopener noreferrer">
+          <Link href="/category/sports" className="full-coverage-link">
             See full coverage
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
+import Link from 'next/link'; // ✅ Import Link from Next.js
 import './medical.css';
 
 interface Post {
@@ -28,7 +29,7 @@ export default async function MedicalPage() {
     <div className="medical-wrapper">
       <div className="medical-banner-wrapper">
         <img
-          src="/Assets/medical.webp" // ✅ Replace with your actual banner image path
+          src="/Assets/medical.webp"
           alt="Medical Banner"
           className="medical-banner"
         />
@@ -42,21 +43,19 @@ export default async function MedicalPage() {
         {posts.map((post) => (
           <div key={post.id} className="medical-news-item">
             {post.featured_image && (
-              <img
-                src={post.featured_image}
-                alt={post.title}
-                className="medical-news-image"
-              />
+              <Link href={`/news/${post.id}`}>
+                <img
+                  src={post.featured_image}
+                  alt={post.title}
+                  className="medical-news-image"
+                />
+              </Link>
             )}
             <div className="medical-news-content">
               <h3>
-                <a
-                  href={`https://vettritv.lk/${post.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href={`/news/${post.id}`}>
                   {post.title}
-                </a>
+                </Link>
               </h3>
             </div>
           </div>

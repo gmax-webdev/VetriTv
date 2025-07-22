@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
+import Link from 'next/link'; // ✅ Import Link for internal routing
 import './political.css';
 
 interface Post {
@@ -10,7 +11,7 @@ interface Post {
   created_at: string;
 }
 
-// Remove HTML tags and inline styles from excerpt
+// Utility: remove inline styles and HTML tags from excerpt
 function stripHtml(html: string | null) {
   if (!html) return '';
   return html
@@ -23,7 +24,7 @@ function stripHtml(html: string | null) {
 export default async function PoliticalPage() {
   const { data: posts, error } = await supabase
     .from('posts')
-    .select('*')
+    .select('id, title, slug, featured_image, excerpt, created_at')
     .eq('category', 'இலங்கை அரசியல்')
     .order('created_at', { ascending: false });
 
@@ -39,7 +40,7 @@ export default async function PoliticalPage() {
     <div className="political-wrapper">
       <div className="political-banner-wrapper">
         <img
-          src="/Assets/political_news.webp" // Replace with your banner image path
+          src="/Assets/political_news.webp"
           alt="Political Banner"
           className="political-banner"
         />
@@ -53,21 +54,19 @@ export default async function PoliticalPage() {
         {posts.map((post) => (
           <div key={post.id} className="political-news-item">
             {post.featured_image && (
-              <img
-                src={post.featured_image}
-                alt={post.title}
-                className="political-news-image"
-              />
+              <Link href={`/news/${post.id}`}>
+                <img
+                  src={post.featured_image}
+                  alt={post.title}
+                  className="political-news-image"
+                />
+              </Link>
             )}
             <div className="political-news-content">
               <h3>
-                <a
-                  href={`https://vettritv.lk/${post.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href={`/news/${post.id}`}>
                   {post.title}
-                </a>
+                </Link>
               </h3>
               <p>{stripHtml(post.excerpt)}</p>
             </div>

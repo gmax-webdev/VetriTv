@@ -44,17 +44,15 @@ const CinemaNews: React.FC = () => {
         <h2 className="cinema-heading">சினிமா செய்திகள்</h2>
         <div className="cinema-divider"></div>
       </div>
+
       <div className="cinema-grid">
         {posts.map((post) => (
           <Link
             key={post.id}
-            href={`https://vettritv.lk/${post.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/news/${post.id}`} // ✅ Internal link now
             className="cinema-card"
           >
-           
-           {post.featured_image && (
+            {post.featured_image && (
               <img src={post.featured_image} alt={post.title} className="cinema-page-img" />
             )}
             <div className="cinema-content">

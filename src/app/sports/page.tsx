@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
+import Link from 'next/link';   // <-- Import Link here
 import './sports.css';
 
 interface Post {
@@ -12,14 +13,14 @@ interface Post {
 function stripHtml(html: string | null): string {
   if (!html) return '';
   const withoutTags = html
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')  // remove <style> blocks
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // remove <script> blocks
-    .replace(/<\/?[^>]+(>|$)/g, '')                  // remove all remaining tags
-    .replace(/&nbsp;/gi, ' ')                        // decode common entities
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')  
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') 
+    .replace(/<\/?[^>]+(>|$)/g, '')                  
+    .replace(/&nbsp;/gi, ' ')                        
     .replace(/&amp;/gi, '&')
     .replace(/&quot;/gi, '"')
     .replace(/&#39;/gi, "'")
-    .replace(/\s{2,}/g, ' ')                         // collapse spaces
+    .replace(/\s{2,}/g, ' ')                         
     .trim();
 
   return withoutTags;
@@ -52,13 +53,9 @@ export default async function SportsPage() {
             <img src={post.featured_image} alt={post.title} />
             <div className="sports-news-content">
               <h3>
-                <a
-                  href={`https://vettritv.lk/${post.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href={`/news/${post.id}`}>
                   {post.title}
-                </a>
+                </Link>
               </h3>
               <p>{stripHtml(post.excerpt)}</p>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link'; // <-- import Link
 import './WorldNews.css';
 
 interface Post {
@@ -25,25 +26,20 @@ const WorldNews: React.FC = () => {
       <h2>World News</h2>
       <div className="world-news-list">
         {posts.length === 0 && <p>No world news found.</p>}
-        {posts.map(post => {
-          const postUrl = `https://vettritv.lk/${post.slug}`;
-          return (
-            <a
-              href={postUrl}
-              key={post.id}
-              className="world-news-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {post.featured_image ? (
-                <img src={post.featured_image} alt={post.title} />
-              ) : (
-                <div className="no-image-placeholder">No Image</div>
-              )}
-              <p>{post.title}</p>
-            </a>
-          );
-        })}
+        {posts.map(post => (
+          <Link
+            href={`/news/${post.id}`}
+            key={post.id}
+            className="world-news-item"
+          >
+            {post.featured_image ? (
+              <img src={post.featured_image} alt={post.title} />
+            ) : (
+              <div className="no-image-placeholder">No Image</div>
+            )}
+            <p>{post.title}</p>
+          </Link>
+        ))}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabaseClient';
+import Link from 'next/link'; // ✅ Import Link for internal navigation
 import './education.css';
 
 interface Post {
@@ -37,7 +38,7 @@ export default async function EducationPage() {
     <div className="education-wrapper">
       <div className="education-banner-wrapper">
         <img
-          src="/Assets/education news 2.jpg" // ✅ Update this path to your actual banner
+          src="/Assets/education news 2.jpg"
           alt="Education Banner"
           className="education-banner"
         />
@@ -51,21 +52,19 @@ export default async function EducationPage() {
         {posts.map((post) => (
           <div key={post.id} className="education-news-item">
             {post.featured_image && (
-              <img
-                src={post.featured_image}
-                alt={post.title}
-                className="education-news-image"
-              />
+              <Link href={`/news/${post.id}`}>
+                <img
+                  src={post.featured_image}
+                  alt={post.title}
+                  className="education-news-image"
+                />
+              </Link>
             )}
             <div className="education-news-content">
               <h3>
-                <a
-                  href={`https://vettritv.lk/${post.slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href={`/news/${post.id}`}>
                   {post.title}
-                </a>
+                </Link>
               </h3>
               <p>{stripHtml(post.content)}</p>
             </div>

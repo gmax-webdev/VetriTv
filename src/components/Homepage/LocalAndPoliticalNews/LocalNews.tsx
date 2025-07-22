@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link'; // ✅ Add Link
 import './LocalAndPoliticalNews.css';
 
 interface Post {
@@ -38,13 +39,9 @@ const LocalNews: React.FC = () => {
           )}
         </div>
         <h3 className="feature-title">
-          <a 
-            href={`https://vettritv.lk/${main.slug}`} 
-            target="_blank" 
-            rel="noopener noreferrer"
-          >
+          <Link href={`/news/${main.id}`}>
             {main.title}
-          </a>
+          </Link>
         </h3>
       </div>
 
@@ -59,13 +56,9 @@ const LocalNews: React.FC = () => {
               )}
             </div>
             <p className="post-title">
-              <a 
-                href={`https://vettritv.lk/${post.slug}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
+              <Link href={`/news/${post.id}`}>
                 {post.title}
-              </a>
+              </Link>
             </p>
           </div>
         ))}
