@@ -1,5 +1,5 @@
 .sports-wrapper {
-  max-width: 850px;
+  max-width: 750px;
   margin: 0 auto 60px;
   position: relative;
   margin-left: 20px;
@@ -74,7 +74,7 @@
 }
 
 .sports-left h3 {
-  font-size: 1.3rem;
+  font-size: 1.0rem;
   margin-bottom: 8px;
   line-height: 1.4;
 }
@@ -91,7 +91,7 @@
 }
 
 .sports-left .excerpt {
-  font-size: 0.95rem;
+  font-size: 0.7rem;
   color: #444;
   line-height: 1.6;
 }
@@ -118,7 +118,7 @@
 }
 
 .sports-right-item p {
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   font-weight: 600;
   line-height: 1.4;
   margin: 0;
@@ -145,7 +145,7 @@
   color: maroon;
   font-weight: 500;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.7rem;
 }
 
 .sports-footer a:hover {

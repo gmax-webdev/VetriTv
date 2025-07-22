@@ -10,7 +10,7 @@
 }
 
 .cinema-heading {
-  font-size: 1.8rem;
+  font-size: 24px;
   font-weight: 700;
   color: #000;
   margin-bottom: 0.5rem;
@@ -67,7 +67,7 @@
 }
 
 .cinema-title {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   margin: 0;
   line-height: 1.4;
@@ -80,8 +80,8 @@
 }
 
 .cinema-page-img {
-  width: 100%;
-  height: 200px;
+  width:100%;
+  height: 180px;
   object-fit: cover;
   border-radius: 10px;
 }

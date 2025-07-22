@@ -139,7 +139,7 @@ export default function AddPostForm() {
               placeholder="Start writing or type / to choose a block"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              rows={15}
+              // rows={}
               required
             />
           </div>
