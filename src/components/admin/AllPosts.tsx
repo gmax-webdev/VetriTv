@@ -42,11 +42,12 @@ const AllPosts = () => {
     setPosts((prev) => prev.filter((p) => p.id !== id));
   };
 
-  const filteredPosts = posts.filter(
-    (post) =>
-      post.title.toLowerCase().includes(search.toLowerCase()) &&
-      (filterCategory === '' || post.category === filterCategory)
-  );
+ const filteredPosts = posts.filter(
+  (post) =>
+    (post.author?.toLowerCase().includes(search.toLowerCase()) ?? false) &&
+    (filterCategory === '' || post.category === filterCategory)
+);
+
 
   return (
     <div className="admin-posts-container">
@@ -61,9 +62,16 @@ const AllPosts = () => {
         />
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="">All Categories</option>
-          <option value="Local">Local</option>
-          <option value="World">World</option>
-          <option value="Politics">Politics</option>
+            <option value="உள்நாட்டுச்செய்திகள்">Local News</option>
+              <option value="World News">World News</option>
+              <option value="இலங்கை அரசியல்">Political</option>
+              <option value="உலக அரசியல்">World political</option>
+              <option value="Sports">Sports</option>
+              <option value="கல்வி">Education</option>
+              <option value="சினிமா">Cinema</option>
+              <option value="Technology">Technology</option>
+              <option value="மருத்துவம்">Medical</option>
+              <option value="Science">Science</option>
         </select>
       </div>
 

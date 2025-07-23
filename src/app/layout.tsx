@@ -2,7 +2,7 @@
 import '../globals.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Poppins } from 'next/font/google';
-import LayoutWrapper from '../components/LayoutWrapper'; // 👈 new wrapper
+import LayoutWrapper from '../components/LayoutWrapper'; // contains Navbar/Footer
 
 const poppins = Poppins({
   subsets: ['latin'],

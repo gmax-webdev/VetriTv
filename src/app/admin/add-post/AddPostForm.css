@@ -15,15 +15,17 @@
 /* LEFT COLUMN (Editor) */
 .post-editor {
   flex: 3;
+
 }
 
 .post-title {
   width: 100%;
-  font-size: 24px;
+  font-size: 20px;
   padding: 12px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-left: 2px;
 }
 
 .content-editor textarea {
@@ -171,4 +173,37 @@
     padding: 10px;
     font-size: 15px;
   }
+}
+
+.tag-input-box {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  background: #eee;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.tag button {
+  background: transparent;
+  border: none;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  display: block;
+  margin-bottom: 6px;
 }

@@ -2,23 +2,36 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { Editor } from '@tinymce/tinymce-react';
 import { supabase } from '@/lib/supabaseClient';
 import './AddPostForm.css';
 
 export default function AddPostForm() {
   const router = useRouter();
+  const editorRef = useRef<any>(null);
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
-  const [tags, setTags] = useState('');
+  const [tagInput, setTagInput] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
   const [featuredImage, setFeaturedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [uploading, setUploading] = useState(false);
-
-  // Ref for Add Media image uploader
   const mediaInputRef = useRef<HTMLInputElement>(null);
-  
+
+  const handleAddTag = () => {
+    const newTag = tagInput.trim();
+    if (newTag && !tags.includes(newTag)) {
+      setTags([...tags, newTag]);
+      setTagInput('');
+    }
+  };
+
+  const removeTag = (tag: string) => {
+    setTags(tags.filter((t) => t !== tag));
+  };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -30,7 +43,6 @@ export default function AddPostForm() {
   const handleImageUpload = async () => {
     if (!featuredImage) return '';
     setUploading(true);
-    
 
     const fileExt = featuredImage.name.split('.').pop();
     const fileName = `featured/${Date.now()}.${fileExt}`;
@@ -83,27 +95,27 @@ export default function AddPostForm() {
       data: { publicUrl },
     } = supabase.storage.from('posts').getPublicUrl(filePath);
 
-    // Insert image HTML into content
-    setContent((prevContent) => `${prevContent}\n<img src="${publicUrl}" alt="" />`);
+    if (editorRef.current) {
+      editorRef.current.insertContent(`<img src="${publicUrl}" alt="media" />`);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const imageUrl = await handleImageUpload();
 
-    function formatContentAsHtml(text: string) {
-  const paragraphs = text
-    .split(/\n{2,}/) // split by 2+ newlines (paragraphs)
-    .map((para) => `<p>${para.trim().replace(/\n/g, '<br />')}</p>`);
-  return paragraphs.join('\n');
-}
+    if (!category) {
+      alert('Please select a category.');
+      return;
+    }
+
+    const imageUrl = await handleImageUpload();
 
     const { error } = await supabase.from('posts').insert([
       {
         title,
-        content: formatContentAsHtml(content),
-        category,
-        tags: tags.split(',').map((t) => t.trim()),
+        content,
+        category, // Now single category
+        tags,
         featured_image: imageUrl,
         status: 'published',
       },
@@ -121,7 +133,7 @@ export default function AddPostForm() {
   return (
     <form className="add-post-form" onSubmit={handleSubmit}>
       <div className="post-container">
-        {/* LEFT Column: Editor */}
+        {/* LEFT Column */}
         <div className="post-editor">
           <input
             type="text"
@@ -140,26 +152,34 @@ export default function AddPostForm() {
             >
               + Add Media
             </button>
-          </div>
-
-          <div className="content-editor">
-            <textarea
-              placeholder="Start writing or type / to choose a block"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              // rows={}
-              required
+            <input
+              type="file"
+              accept="image/*"
+              ref={mediaInputRef}
+              style={{ display: 'none' }}
+              onChange={handleMediaImageUpload}
             />
           </div>
 
-          {/* Hidden file input for Add Media */}
-          <input
-            type="file"
-            accept="image/*"
-            ref={mediaInputRef}
-            style={{ display: 'none' }}
-            onChange={handleMediaImageUpload}
-          />
+          <div className="content-editor">
+            <Editor
+              apiKey="pal967ytpo8qf4nglkkg0yvpiqb9dqjictf72o2hm63fh53d"
+              onInit={(evt, editor) => (editorRef.current = editor)}
+              value={content}
+              onEditorChange={(newValue) => setContent(newValue)}
+              init={{
+                height: 500,
+                menubar: true,
+                plugins: [
+                  'advlist autolink lists link image charmap preview anchor',
+                  'searchreplace visualblocks code fullscreen',
+                  'insertdatetime media table paste help wordcount',
+                ],
+                toolbar:
+                  'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | removeformat | help',
+              }}
+            />
+          </div>
 
           <div className="featured-image-box">
             <label>Featured Image</label>
@@ -168,7 +188,7 @@ export default function AddPostForm() {
           </div>
         </div>
 
-        {/* RIGHT Column: Sidebar */}
+        {/* RIGHT Column */}
         <div className="post-sidebar">
           <div className="box publish-box">
             <h4>Publish</h4>
@@ -178,8 +198,13 @@ export default function AddPostForm() {
           </div>
 
           <div className="box">
-            <h4>Categories</h4>
-            <select value={category} onChange={(e) => setCategory(e.target.value)} required>
+            <h4>Category</h4>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+              className="category-select"
+            >
               <option value="">Select Category</option>
               <option value="உள்நாட்டுச்செய்திகள்">Local News</option>
               <option value="World News">World News</option>
@@ -191,18 +216,32 @@ export default function AddPostForm() {
               <option value="Technology">Technology</option>
               <option value="மருத்துவம்">Medical</option>
               <option value="Science">Science</option>
-
             </select>
           </div>
 
           <div className="box">
             <h4>Tags</h4>
-            <input
-              type="text"
-              placeholder="Separate tags with commas"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-            />
+            <div className="tag-input-box">
+              <input
+                type="text"
+                placeholder="Type a tag and click Add"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+              />
+              <button type="button" onClick={handleAddTag}>
+                Add
+              </button>
+            </div>
+            <div className="tag-list">
+              {tags.map((tag) => (
+                <span key={tag} className="tag">
+                  {tag}
+                  <button type="button" onClick={() => removeTag(tag)}>
+                    ✕
+                  </button>
+                </span>
+              ))}
+            </div>
           </div>
 
           <div className="box">
