@@ -17,16 +17,16 @@ const LiveUpdates = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://vettritv.lk/wp-json/wp/v2/posts?_embed&per_page=20')
+    fetch('https://vettritv.lk/wp-json/wp/v2/posts?_embed&per_page=30')
       .then(res => res.json())
       .then((data: any[]) => {
-        const now = new Date();
-        const oneHourMs = 60 * 60 * 1000;
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0]; // e.g., "2025-07-23"
 
         const updates = data
           .filter(post => {
-            const postDate = new Date(post.date);
-            return now.getTime() - postDate.getTime() <= oneHourMs;
+            const postDateStr = new Date(post.date).toISOString().split('T')[0];
+            return postDateStr === todayStr;
           })
           .map(post => ({
             id: post.id,
@@ -64,13 +64,13 @@ const LiveUpdates = () => {
   return (
     <div className="live-updates-section">
       <h3 className="live-title">
-        <span className="live-icon">🟢</span> LIVE UPDATES (Last 1 Hour)
+        <span className="live-icon">🟢</span> LIVE UPDATES (Today)
       </h3>
 
       {loading ? (
         <p>Loading updates...</p>
       ) : allUpdates.length === 0 ? (
-        <p>No live updates in the last 1 hour.</p>
+        <p>No live updates today.</p>
       ) : (
         <ul className="updates-list">
           {allUpdates.map(update => (

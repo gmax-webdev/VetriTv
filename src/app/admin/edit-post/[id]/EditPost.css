@@ -1,0 +1,52 @@
+.edit-post-container {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit-post-container h2 {
+  margin-bottom: 24px;
+  color: #900f0f;
+}
+
+.edit-post-container label {
+  display: block;
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+.edit-post-container input,
+.edit-post-container textarea {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.update-btn {
+  margin-top: 24px;
+  padding: 10px 20px;
+  background-color: #106b01;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.update-btn:hover {
+  background-color: #0e5a01;
+}
+
+.remove-btn {
+  margin-top: 8px;
+  background: #900f0f;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

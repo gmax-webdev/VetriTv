@@ -1,81 +1,129 @@
+/* Wrapper */
 .post-container {
-  padding: 20px;
-  max-width: 900px;
-  margin: auto;
+  max-width: 600px;
+  /* margin: 40px auto; */
+  padding: 0 16px;
   background-color: #fff;
 }
 
 .post-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
+/* Title */
 .post-title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
-  color: #222;
+  color: #111;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  margin-left: 1px;
+  display: block;
+  overflow: visible;
+  /* white-space: normal; */
+  /* text-overflow: unset; */
+  /* -webkit-line-clamp: unset;
+  -webkit-box-orient: unset; */
 }
 
+
+/* Meta */
 .post-meta {
-  font-size: 16px;
+  font-size: 14px;
   color: #555;
   display: flex;
+  gap: 15px;
   align-items: center;
-  gap: 8px;
+  margin-top: 18px;
 }
 
-.dot {
-  font-weight: bold;
-  color:maroon;
-}
 
+/* Featured Image */
 .post-image {
   width: 100%;
-  border-radius: 8px;
+  height: auto;
+  max-height: 400px;
   object-fit: cover;
-  max-height: 500px;
+  border-radius: 8px;
+  margin: 20px 0;
 }
 
+/* Views and Shares */
 .post-meta-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  border-top: 1px solid #eee;
-  padding-top: 12px;
-  margin-top: 10px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: #333;
 }
 
 .meta-left {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  color: #333;
+  gap: 10px;
 }
 
 .meta-right {
   display: flex;
-  align-items: center;
   gap: 10px;
 }
 
+/* Post Body */
 .post-content {
-  font-size: 16px;
+  font-size: 13px;
   line-height: 1.7;
-  color: #333;
+  color: #222;
+  /* white-space: pre-line; */
 }
 
-/* Responsive Layout */
-@media (max-width: 600px) {
+.post-content p {
+  margin: 16px 0;
+  line-height: 1.6;
+  /* font-size: 18px; */
+}
+
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 20px auto;
+  border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .post-title {
+    font-size: 24px;
+  }
+
   .post-meta-bottom {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
 
-  .meta-right {
-    align-self: flex-end;
+  .post-image {
+    max-height: 250px;
   }
+
+  .post-content {
+    font-size: 16px;
+  }
+}
+
+/* Post content images added via "Add Media" */
+.post-content .media-block {
+  margin: 24px 0;
+  text-align: center;
+}
+
+.post-content .media-block img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: inline-block;
 }

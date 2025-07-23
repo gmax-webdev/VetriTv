@@ -106,10 +106,30 @@ const AllPosts = () => {
 
               <td>{post.views ?? 0}</td>
               <td>{post.comments ?? 0}</td>
-              <td>
-                <button className="edit-btn">✏️</button>
-                <button className="delete-btn" onClick={() => handleDelete(post.id)}>🗑️</button>
-              </td>
+               <td className="actions-cell">
+  <button
+    className="view-btn"
+    onClick={() => window.open(`/news/${post.id}`, '_blank')}
+    title="View Post"
+  >
+    👁️
+  </button>
+  <button
+    className="edit-btn"
+    onClick={() => window.location.href = `/admin/edit-post/${post.id}`}
+    title="Edit Post"
+  >
+    ✏️
+  </button>
+  <button
+    className="delete-btn"
+    onClick={() => handleDelete(post.id)}
+    title="Delete Post"
+  >
+    🗑️
+  </button>
+</td>
+
             </tr>
           ))}
         </tbody>

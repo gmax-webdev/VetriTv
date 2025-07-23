@@ -30,6 +30,7 @@ export default function AddPostForm() {
   const handleImageUpload = async () => {
     if (!featuredImage) return '';
     setUploading(true);
+    
 
     const fileExt = featuredImage.name.split('.').pop();
     const fileName = `featured/${Date.now()}.${fileExt}`;
@@ -90,10 +91,17 @@ export default function AddPostForm() {
     e.preventDefault();
     const imageUrl = await handleImageUpload();
 
+    function formatContentAsHtml(text: string) {
+  const paragraphs = text
+    .split(/\n{2,}/) // split by 2+ newlines (paragraphs)
+    .map((para) => `<p>${para.trim().replace(/\n/g, '<br />')}</p>`);
+  return paragraphs.join('\n');
+}
+
     const { error } = await supabase.from('posts').insert([
       {
         title,
-        content,
+        content: formatContentAsHtml(content),
         category,
         tags: tags.split(',').map((t) => t.trim()),
         featured_image: imageUrl,
@@ -173,10 +181,17 @@ export default function AddPostForm() {
             <h4>Categories</h4>
             <select value={category} onChange={(e) => setCategory(e.target.value)} required>
               <option value="">Select Category</option>
-              <option value="Local News">Local News</option>
+              <option value="உள்நாட்டுச்செய்திகள்">Local News</option>
               <option value="World News">World News</option>
-              <option value="Politics">Politics</option>
-              <option value="Updates">Updates</option>
+              <option value="இலங்கை அரசியல்">Political</option>
+              <option value="உலக அரசியல்">World political</option>
+              <option value="Sports">Sports</option>
+              <option value="கல்வி">Education</option>
+              <option value="சினிமா">Cinema</option>
+              <option value="Technology">Technology</option>
+              <option value="மருத்துவம்">Medical</option>
+              <option value="Science">Science</option>
+
             </select>
           </div>
 

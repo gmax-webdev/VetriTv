@@ -40,7 +40,7 @@ export default async function PostPage({ params }: Props) {
 
         <div className="post-meta">
           <span className="author">By {post.author || 'Admin'}</span>
-          <span className="dot">•</span>
+          <span className="dot">-</span>
           <span className="date">{formattedDate}</span>
         </div>
 
@@ -56,7 +56,7 @@ export default async function PostPage({ params }: Props) {
         <div className="post-meta-bottom">
           <div className="meta-left">
             <span className="views">👁 {post.views + 1} views</span>
-            <span className="dot">•</span>
+            {/* <span className="dot">•</span> */}
             <span className="shares">🔁 {post.shares || 0} shares</span>
           </div>
           <div className="meta-right">
