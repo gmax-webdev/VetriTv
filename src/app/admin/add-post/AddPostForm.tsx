@@ -1,15 +1,13 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Editor } from '@tinymce/tinymce-react';
 import { supabase } from '@/lib/supabaseClient';
+import TiptapEditor from '@/components/admin/TiptapEditor';
 import './AddPostForm.css';
 
 export default function AddPostForm() {
   const router = useRouter();
-  const editorRef = useRef<any>(null);
-
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
@@ -18,7 +16,6 @@ export default function AddPostForm() {
   const [featuredImage, setFeaturedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [uploading, setUploading] = useState(false);
-  const mediaInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddTag = () => {
     const newTag = tagInput.trim();
@@ -29,74 +26,39 @@ export default function AddPostForm() {
   };
 
   const removeTag = (tag: string) => {
-    setTags(tags.filter((t) => t !== tag));
+    setTags(tags.filter(t => t !== tag));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0] ?? null;
+    setFeaturedImage(file);
     if (file) {
-      setFeaturedImage(file);
       setPreviewUrl(URL.createObjectURL(file));
+    } else {
+      setPreviewUrl('');
     }
   };
 
-  const handleImageUpload = async () => {
+  const handleImageUpload = async (): Promise<string> => {
     if (!featuredImage) return '';
     setUploading(true);
+    try {
+      const fileExt = featuredImage.name.split('.').pop();
+      const fileName = `featured/${Date.now()}.${fileExt}`;
+      const { error } = await supabase.storage
+        .from('posts')
+        .upload(fileName, featuredImage, { cacheControl: '3600', upsert: false });
 
-    const fileExt = featuredImage.name.split('.').pop();
-    const fileName = `featured/${Date.now()}.${fileExt}`;
-    const filePath = `${fileName}`;
+      if (error) throw error;
 
-    const { error: uploadError } = await supabase.storage
-      .from('posts')
-      .upload(filePath, featuredImage, {
-        cacheControl: '3600',
-        upsert: false,
-      });
-
-    if (uploadError) {
-      console.error('Upload Error:', uploadError);
+      const { data } = supabase.storage.from('posts').getPublicUrl(fileName);
+      return data.publicUrl || '';
+    } catch (err) {
       alert('Image upload failed');
-      setUploading(false);
+      console.error(err);
       return '';
-    }
-
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from('posts').getPublicUrl(filePath);
-
-    setUploading(false);
-    return publicUrl;
-  };
-
-  const handleMediaImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const fileExt = file.name.split('.').pop();
-    const fileName = `inline/${Date.now()}.${fileExt}`;
-    const filePath = `${fileName}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from('posts')
-      .upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
-
-    if (uploadError) {
-      console.error('Upload Error:', uploadError);
-      alert('Image upload failed');
-      return;
-    }
-
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from('posts').getPublicUrl(filePath);
-
-    if (editorRef.current) {
-      editorRef.current.insertContent(`<img src="${publicUrl}" alt="media" />`);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -114,7 +76,7 @@ export default function AddPostForm() {
       {
         title,
         content,
-        category, // Now single category
+        category,
         tags,
         featured_image: imageUrl,
         status: 'published',
@@ -126,14 +88,14 @@ export default function AddPostForm() {
       router.push('/');
     } else {
       alert('Failed to publish post');
-      console.error(error.message);
+      console.error(error);
     }
   };
 
   return (
     <form className="add-post-form" onSubmit={handleSubmit}>
       <div className="post-container">
-        {/* LEFT Column */}
+        {/* LEFT */}
         <div className="post-editor">
           <input
             type="text"
@@ -144,41 +106,8 @@ export default function AddPostForm() {
             required
           />
 
-          <div className="editor-toolbar">
-            <button
-              type="button"
-              className="add-media-btn"
-              onClick={() => mediaInputRef.current?.click()}
-            >
-              + Add Media
-            </button>
-            <input
-              type="file"
-              accept="image/*"
-              ref={mediaInputRef}
-              style={{ display: 'none' }}
-              onChange={handleMediaImageUpload}
-            />
-          </div>
-
-          <div className="content-editor">
-            <Editor
-              apiKey="pal967ytpo8qf4nglkkg0yvpiqb9dqjictf72o2hm63fh53d"
-              onInit={(evt, editor) => (editorRef.current = editor)}
-              value={content}
-              onEditorChange={(newValue) => setContent(newValue)}
-              init={{
-                height: 500,
-                menubar: true,
-                plugins: [
-                  'advlist autolink lists link image charmap preview anchor',
-                  'searchreplace visualblocks code fullscreen',
-                  'insertdatetime media table paste help wordcount',
-                ],
-                toolbar:
-                  'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table | removeformat | help',
-              }}
-            />
+          <div className="content-editor" style={{ minHeight: 300 }}>
+            <TiptapEditor value={content} onChange={setContent} />
           </div>
 
           <div className="featured-image-box">
@@ -188,7 +117,7 @@ export default function AddPostForm() {
           </div>
         </div>
 
-        {/* RIGHT Column */}
+        {/* RIGHT */}
         <div className="post-sidebar">
           <div className="box publish-box">
             <h4>Publish</h4>
@@ -224,21 +153,23 @@ export default function AddPostForm() {
             <div className="tag-input-box">
               <input
                 type="text"
-                placeholder="Type a tag and click Add"
+                placeholder="Type a tag"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddTag();
+                  }
+                }}
               />
-              <button type="button" onClick={handleAddTag}>
-                Add
-              </button>
+              <button type="button" onClick={handleAddTag}>Add</button>
             </div>
             <div className="tag-list">
               {tags.map((tag) => (
                 <span key={tag} className="tag">
                   {tag}
-                  <button type="button" onClick={() => removeTag(tag)}>
-                    ✕
-                  </button>
+                  <button type="button" onClick={() => removeTag(tag)}>✕</button>
                 </span>
               ))}
             </div>

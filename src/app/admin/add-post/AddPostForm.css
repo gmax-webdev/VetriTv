@@ -207,3 +207,12 @@
   display: block;
   margin-bottom: 6px;
 }
+
+/* globals.css or TiptapEditor.css */
+.tiptap-editor {
+  min-height: 300px;
+}
+
+.tiptap-editor p {
+  margin: 0 0 10px;
+}
