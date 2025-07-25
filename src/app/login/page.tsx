@@ -3,111 +3,112 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import './login.css'; // Your custom styles
+import './login.css';
 
 export default function LoginPage() {
   const router = useRouter();
   const [isSignup, setIsSignup] = useState(false);
-  const [name, setName] = useState(''); // User full name
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('updater'); // Default role
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('updater');
   const [error, setError] = useState('');
+  const [loggedInUserRole, setLoggedInUserRole] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    if (isSignup) {
-      // SIGN UP FLOW
-      try {
-        const { data, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              name, // Store full name in user_metadata
-              role, // Store role in user_metadata
-            },
-          },
-        });
+    const email = `${username.toLowerCase()}@vettritv.lk`;
 
-        if (signUpError) {
-          setError(signUpError.message);
-          return;
-        }
+    try {
+      const { data, error: loginError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-         const user = data.user;
-    if (user) {
-      // ✅ Store name into profiles table
+      if (loginError) {
+        setError(loginError.message);
+        return;
+      }
+
+      const userRole = data.user?.user_metadata?.role;
+      setLoggedInUserRole(userRole);
+
+      if (isSignup) return; // prevent redirect if we came here to show signup after login
+
+      if (userRole === 'admin') {
+        router.push('/superadmin/dashboard');
+      } else if (userRole === 'updater') {
+        router.push('/admin/dashboard');
+      } else {
+        setError('Unauthorized role');
+      }
+    } catch (error: any) {
+      setError(error.message || 'Login failed');
+    }
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    const newEmail = `${username.toLowerCase()}@vettritv.lk`;
+
+    try {
+      const { data, error: signUpError } = await supabase.auth.admin.createUser({
+        email: newEmail,
+        password,
+        user_metadata: {
+          username,
+          name,
+          role,
+        },
+      });
+
+      if (signUpError) {
+        setError(signUpError.message);
+        return;
+      }
+
+      // Insert into profiles table (optional)
       await supabase.from('profiles').insert([
         {
-          id: user.id,
+          id: data.user?.id,
           name: name,
         },
       ]);
-    }
 
-        // Signup successful, redirect based on role
-        if (role === 'admin') {
-          router.push('/superadmin/dashboard');
-        } else {
-          router.push('/admin/dashboard');
-        }
-      } catch (error: any) {
-        setError(error.message || 'Signup failed');
-      }
-    } else {
-      // LOGIN FLOW
-      try {
-        const { data, error: loginError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (loginError) {
-          setError(loginError.message);
-          return;
-        }
-
-        const userRole = data.user?.user_metadata?.role;
-
-        if (userRole === 'admin') {
-          router.push('/superadmin/dashboard');
-        } else if (userRole === 'updater') {
-          router.push('/admin/dashboard');
-        } else {
-          setError('Unauthorized role');
-        }
-      } catch (error: any) {
-        setError(error.message || 'Login failed');
-      }
+      alert('User created successfully!');
+      setIsSignup(false);
+    } catch (error: any) {
+      setError(error.message || 'Signup failed');
     }
   };
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
-        <h2>{isSignup ? 'Sign Up' : 'Log In'} to Vettri TV</h2>
+      <form onSubmit={isSignup ? handleSignup : handleLogin} className="login-form">
+        <h2>{isSignup ? 'Super Admin - Add New User' : 'Log In to Vettri TV'}</h2>
 
         {isSignup && (
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required
-            autoComplete="name"
-          />
+          <>
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </>
         )}
 
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
           required
-          autoComplete="email"
         />
 
         <input
@@ -116,7 +117,6 @@ export default function LoginPage() {
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
-          autoComplete={isSignup ? 'new-password' : 'current-password'}
           minLength={6}
         />
 
@@ -129,21 +129,40 @@ export default function LoginPage() {
 
         {error && <p className="error">{error}</p>}
 
-        <button type="submit">{isSignup ? 'Sign Up' : 'Log In'}</button>
+        <button type="submit">{isSignup ? 'Create User' : 'Log In'}</button>
 
-        <p className="toggle">
-          {isSignup ? 'Already have an account?' : "Don't have an account?"}{' '}
-          <button
-            type="button"
-            onClick={() => {
-              setError('');
-              setIsSignup(!isSignup);
-            }}
-            className="toggle-btn"
-          >
-            {isSignup ? 'Log In' : 'Sign Up'}
-          </button>
-        </p>
+        {/* Only show signup toggle if super admin is logged in */}
+        {!isSignup && loggedInUserRole === 'admin' && (
+          <p className="toggle">
+            Want to create new user?{' '}
+            <button
+              type="button"
+              onClick={() => {
+                setError('');
+                setIsSignup(true);
+              }}
+              className="toggle-btn"
+            >
+              Sign Up
+            </button>
+          </p>
+        )}
+
+        {isSignup && (
+          <p className="toggle">
+            Already done?{' '}
+            <button
+              type="button"
+              onClick={() => {
+                setError('');
+                setIsSignup(false);
+              }}
+              className="toggle-btn"
+            >
+              Go back to Login
+            </button>
+          </p>
+        )}
       </form>
     </div>
   );

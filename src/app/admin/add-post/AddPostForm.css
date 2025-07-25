@@ -216,3 +216,50 @@
 .tiptap-editor p {
   margin: 0 0 10px;
 }
+
+.tag-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.tag-input-wrapper input {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.add-tag-button {
+  background-color: #106b01;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tag-preview {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-item {
+  background-color: #eee;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  font-size: 14px;
+  margin-left: 6px;
+  cursor: pointer;
+  color: #900f0f;
+}

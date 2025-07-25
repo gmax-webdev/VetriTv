@@ -1,101 +1,174 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import TiptapEditor from '@/components/admin/TiptapEditor';
 import './AddPostForm.css';
 
 export default function AddPostForm() {
   const router = useRouter();
+  const mediaInputRef = useRef<HTMLInputElement>(null);
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
   const [tagInput, setTagInput] = useState('');
-  const [tags, setTags] = useState<string[]>([]);
+  const [tagList, setTagList] = useState<string[]>([]);
   const [featuredImage, setFeaturedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [author, setAuthor] = useState('');
 
-  const handleAddTag = () => {
-    const newTag = tagInput.trim();
-    if (newTag && !tags.includes(newTag)) {
-      setTags([...tags, newTag]);
-      setTagInput('');
-    }
-  };
 
-  const removeTag = (tag: string) => {
-    setTags(tags.filter(t => t !== tag));
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    setFeaturedImage(file);
-    if (file) {
-      setPreviewUrl(URL.createObjectURL(file));
+ useEffect(() => {
+  const getUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) {
+      alert('You must be logged in to add posts');
+      router.push('/admin/login');
     } else {
-      setPreviewUrl('');
+      setUserId(data.user.id);
+      // NEW: set author name here
+      setAuthor(data.user.user_metadata?.full_name || data.user.email || 'Unknown User');
+    }
+  };
+  getUser();
+}, [router]);
+
+
+  // ✅ Image preview
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFeaturedImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
+  // ✅ Upload featured image
   const handleImageUpload = async (): Promise<string> => {
     if (!featuredImage) return '';
     setUploading(true);
+
     try {
       const fileExt = featuredImage.name.split('.').pop();
       const fileName = `featured/${Date.now()}.${fileExt}`;
-      const { error } = await supabase.storage
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
         .from('posts')
-        .upload(fileName, featuredImage, { cacheControl: '3600', upsert: false });
+        .upload(filePath, featuredImage, {
+          cacheControl: '3600',
+          upsert: false,
+        });
 
-      if (error) throw error;
+      if (uploadError) throw uploadError;
 
-      const { data } = supabase.storage.from('posts').getPublicUrl(fileName);
-      return data.publicUrl || '';
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from('posts').getPublicUrl(filePath);
+
+      return publicUrl;
     } catch (err) {
       alert('Image upload failed');
-      console.error(err);
+      console.error('Upload Error:', err);
       return '';
     } finally {
       setUploading(false);
     }
   };
 
+  // ✅ Inline media upload
+  const handleMediaImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `inline/${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('posts')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from('posts').getPublicUrl(filePath);
+
+      setContent((prev) => `${prev}\n<img src="${publicUrl}" alt="" />`);
+    } catch (err) {
+      alert('Inline image upload failed');
+      console.error(err);
+    }
+  };
+
+  // ✅ Add tag
+  const handleAddTag = () => {
+    const newTag = tagInput.trim();
+    if (newTag && !tagList.includes(newTag)) {
+      setTagList([...tagList, newTag]);
+      setTagInput('');
+    }
+  };
+
+  // ✅ Remove tag
+  const removeTag = (tagToRemove: string) => {
+    setTagList(tagList.filter((tag) => tag !== tagToRemove));
+  };
+
+  // ✅ Submit post
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setUploading(true);
 
-    if (!category) {
-      alert('Please select a category.');
+    if (!userId) {
+      alert('User not found. Try logging in again.');
+      setUploading(false);
       return;
     }
 
     const imageUrl = await handleImageUpload();
 
+    const htmlContent = content
+      .split(/\n{2,}/)
+      .map((para) => `<p>${para.trim().replace(/\n/g, '<br />')}</p>`)
+      .join('\n');
+
     const { error } = await supabase.from('posts').insert([
       {
         title,
-        content,
+        content: htmlContent,
         category,
-        tags,
+        tags: tagList,
         featured_image: imageUrl,
         status: 'published',
+        user_id: userId,
+        author: author,
       },
     ]);
 
-    if (!error) {
-      alert('Post published successfully!');
-      router.push('/');
-    } else {
+    if (error) {
       alert('Failed to publish post');
-      console.error(error);
+      console.error(error.message);
+    } else {
+      alert('Post published successfully!');
+      router.push('/admin/my-posts');
     }
+
+    setUploading(false);
   };
 
   return (
     <form className="add-post-form" onSubmit={handleSubmit}>
       <div className="post-container">
-        {/* LEFT */}
+        {/* LEFT COLUMN */}
         <div className="post-editor">
           <input
             type="text"
@@ -106,8 +179,27 @@ export default function AddPostForm() {
             required
           />
 
-          <div className="content-editor" style={{ minHeight: 300 }}>
-            <TiptapEditor value={content} onChange={setContent} />
+          <div className="editor-toolbar">
+            <button type="button" onClick={() => mediaInputRef.current?.click()}>
+              + Add Media
+            </button>
+            <input
+              type="file"
+              accept="image/*"
+              ref={mediaInputRef}
+              style={{ display: 'none' }}
+              onChange={handleMediaImageUpload}
+            />
+          </div>
+
+          <div className="content-editor">
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="Write content here..."
+              rows={12}
+              required
+            />
           </div>
 
           <div className="featured-image-box">
@@ -117,7 +209,7 @@ export default function AddPostForm() {
           </div>
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT SIDEBAR */}
         <div className="post-sidebar">
           <div className="box publish-box">
             <h4>Publish</h4>
@@ -128,17 +220,12 @@ export default function AddPostForm() {
 
           <div className="box">
             <h4>Category</h4>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              required
-              className="category-select"
-            >
+            <select value={category} onChange={(e) => setCategory(e.target.value)} required>
               <option value="">Select Category</option>
               <option value="உள்நாட்டுச்செய்திகள்">Local News</option>
               <option value="World News">World News</option>
               <option value="இலங்கை அரசியல்">Political</option>
-              <option value="உலக அரசியல்">World political</option>
+              <option value="உலக அரசியல்">World Political</option>
               <option value="Sports">Sports</option>
               <option value="கல்வி">Education</option>
               <option value="சினிமா">Cinema</option>
@@ -150,26 +237,24 @@ export default function AddPostForm() {
 
           <div className="box">
             <h4>Tags</h4>
-            <div className="tag-input-box">
+            <div className="tag-input-wrapper">
               <input
                 type="text"
-                placeholder="Type a tag"
+                placeholder="Type a tag..."
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleAddTag();
-                  }
-                }}
               />
-              <button type="button" onClick={handleAddTag}>Add</button>
+              <button type="button" onClick={handleAddTag} className="add-tag-button">
+                Add
+              </button>
             </div>
-            <div className="tag-list">
-              {tags.map((tag) => (
-                <span key={tag} className="tag">
+            <div className="tag-preview">
+              {tagList.map((tag) => (
+                <span key={tag} className="tag-item">
                   {tag}
-                  <button type="button" onClick={() => removeTag(tag)}>✕</button>
+                  <button type="button" onClick={() => removeTag(tag)} className="tag-remove">
+                    ×
+                  </button>
                 </span>
               ))}
             </div>

@@ -1,0 +1,28 @@
+.dashboard-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.create-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create-user-form input,
+.create-user-form select,
+.create-user-form button {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+}

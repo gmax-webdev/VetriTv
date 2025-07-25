@@ -12,6 +12,7 @@ import LocalAndPoliticalLayout from '@/components/Homepage/LocalAndPoliticalNews
 import SportsSection from '@/components/Homepage/SportsNews/SportsSection'; 
 import CinemaNews from '@/components/Homepage/CinemaNews/CinemaNews';
 import '@/globals.css';
+import EntertainmentNewsSection from '@/components/Homepage/EntertainmentNewsSection/EntertainmentNewsSection';
 
 const LayoutClient = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -42,6 +43,7 @@ const LayoutClient = ({ children }: { children: React.ReactNode }) => {
             </div>
         )}
           {isHome && <CinemaNews/>}
+          {isHome && <EntertainmentNewsSection />}
           <Footer />
         </div>
       </div>

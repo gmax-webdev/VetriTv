@@ -22,7 +22,7 @@ const CinemaNews: React.FC = () => {
         .select('id, title, slug, featured_image')
         .eq('category', 'சினிமா')
         .order('created_at', { ascending: false })
-        .limit(9);
+        .limit(4);
 
       if (error) {
         console.error('Cinema fetch error:', error);
