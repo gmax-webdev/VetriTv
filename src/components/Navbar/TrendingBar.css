@@ -45,3 +45,67 @@
 .trending-links a:hover {
   color: #0056b3;
 }
+
+@media (max-width: 768px) {
+  .trending-container {
+    padding: 8px 12px;
+  }
+
+  .trending-inner {
+    padding-left: 20px;
+    gap: 6px;
+  }
+
+  .trending-icon {
+    font-size: 14px;
+  }
+
+  .trending-label {
+    font-size: 12px;
+  }
+
+  .trending-separator {
+    font-size: 12px;
+  }
+
+  .trending-links {
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .trending-links a {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .trending-container {
+    padding: 6px 10px;
+  }
+
+  .trending-inner {
+    padding-left: 10px;
+    gap: 4px;
+  }
+
+  .trending-icon {
+    font-size: 12px;
+  }
+
+  .trending-label {
+    font-size: 11px;
+  }
+
+  .trending-separator {
+    font-size: 11px;
+  }
+
+  .trending-links {
+    gap: 8px;
+    font-size: 11px;
+  }
+
+  .trending-links a {
+    font-size: 11px;
+  }
+}

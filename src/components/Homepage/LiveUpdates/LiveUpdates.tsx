@@ -18,7 +18,7 @@ const LiveUpdates = () => {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    fetch('https://vettritv.lk/wp-json/wp/v2/posts?_embed&per_page=30')
+    fetch('/api/latest-news')
       .then(res => res.json())
       .then((data: any[]) => {
         const today = new Date();

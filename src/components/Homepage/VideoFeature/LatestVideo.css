@@ -35,7 +35,7 @@
 }
 
 .video-title {
-  font-size: 1.3rem;
+  font-size: 1.0rem;
   font-weight: 800;
   color:  #006400;
   margin-top: 10px;
@@ -62,9 +62,56 @@
   border-radius: 10px ;
 }
 
+
 @media screen and (max-width: 768px) {
-  .latest-video-title {
+  .latest-video-section h1 {
+    font-size: 18px;
+    margin-left: 20px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .video-thumbnail {
+    width: 100%;
+    height: auto;
+  }
+
+  .video-thumbnail iframe {
+    width: 100%;
+    height: 250px;
+    aspect-ratio: 16 / 9;
+  }
+
+  .video-title {
     font-size: 1rem;
-    padding: 8px;
+    text-align: center;
+  }
+
+  .orange-bar {
+    width: 100px;
+    height: 8px;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .video-title-container {
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .latest-video-section h1 {
+    font-size: 16px;
+    margin-left: 10px;
+  }
+
+  .orange-bar {
+    width: 80px;
+    height: 6px;
+  }
+
+  .video-title {
+    font-size: 0.85rem;
   }
 }

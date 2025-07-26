@@ -13,10 +13,11 @@ interface Post {
 export default async function TechnologyPage() {
   const { data: posts, error } = await supabase
     .from('posts')
-    .select('id, title, slug, featured_image, created_at')
-    .eq('category', 'Technology')
+   .select('id, title, slug, featured_image, created_at, category(name)')
+   .eq('category.name', 'technology')
     .order('created_at', { ascending: false });
 
+    console.log(posts); 
   if (error || !posts || posts.length === 0) {
     return (
       <p style={{ padding: '20px', textAlign: 'center' }}>

@@ -28,24 +28,20 @@
   margin-bottom: 10px;
 }
 
-.dot {
-  width: 8px;
-  height: 8px;
-  background-color: orange;
-  border-radius: 50%;
-  margin-top: 6px;
-}
-
 .time {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: #444;
   min-width: 60px;
 }
 
 .message {
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   color: #222;
+}
+
+.message:hover {
+  color: #106b01;
 }
 
 .see-all-btn {
@@ -63,5 +59,48 @@
 
 .see-all-btn:hover {
   color: #106b01;
+}
+
+@media screen and (max-width: 768px) {
+  /* Force desktop styles on mobile */
+  .updates-list li {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .live-title {
+    font-size: 1rem !important;
+    text-align: left !important;
+  }
+
+  .time {
+    font-size: 0.7rem !important;
+    min-width: 60px !important;
+  }
+
+  .message {
+    font-size: 0.7rem !important;
+    
+  }
+
+  .see-all-btn {
+    font-size: 14px !important;
+    text-align: left !important;
+  }
+
+  .live-updates-section {
+    padding: 15px !important;
+    border-radius: 10px !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Same overrides for smaller phones */
+  .live-title,
+  .see-all-btn {
+    font-size: inherit !important;
+  }
 }
 

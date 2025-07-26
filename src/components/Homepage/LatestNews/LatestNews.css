@@ -54,32 +54,45 @@
   color: #555;
   font-size: 0.9rem;
 }
- @media (max-width: 768px) {
+@media (max-width: 768px) {
   .latest-news-item {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row !important;
+    align-items: center !important;
   }
 
   .latest-news-item img {
-    width: 100%;
-    height: auto;
+    width: 100px !important;
+    height: 80px !important;
   }
 
   .latest-news-item p {
-    font-size: 1rem;
+    font-size: 13px !important;
   }
 }
 
 @media (max-width: 480px) {
   .latest-news h2 {
-    font-size: 1.2rem;
+    font-size: 24px !important;
   }
 
   .latest-news-item p {
-    font-size: 0.95rem;
+    font-size: 12px !important;
   }
 }
-.latest-news-item:hover {
-  color: #006400;
-  text-decoration: underline;
+
+/* Desktop: Centered with max-width (example) */
+.latest-news {
+  max-width: 1200px;    /* or whatever you use */
+  /* margin: 0 auto;       */
+  /* padding: 1rem; */
+}
+
+/* Mobile: Full width, no side margins */
+@media (max-width: 768px) {
+  .latest-news {
+    width: 100% !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }

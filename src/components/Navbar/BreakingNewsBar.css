@@ -1,3 +1,4 @@
+/* === Breaking News Wrapper === */
 .breaking-wrapper {
   width: 100%;
   background-color: #900f0f; /* Maroon */
@@ -8,8 +9,10 @@
   font-family: sans-serif;
   border-top: 2px solid #fff;
   border-bottom: 2px solid #fff;
+  box-sizing: border-box;
 }
 
+/* === Breaking Label === */
 .breaking-label {
   display: flex;
   flex-direction: column;
@@ -25,39 +28,51 @@
   font-weight: bold;
   font-size: 10px;
   letter-spacing: 1px;
-  color: #ffff7b; 
+  color: #ffff7b;
+  text-transform: uppercase;
 }
 
+/* === News Category Tag === */
 .news-text {
   background-color: #106b01; /* Green */
   color: white;
   padding: 2px 6px;
-  margin-top: 2px;
-  font-size: 1px;
+  margin-top: 4px;
+  font-size: 10px;
   border-radius: 3px;
+  white-space: nowrap;
 }
 
+/* === Ticker Area === */
 .breaking-ticker {
   flex: 1;
   overflow: hidden;
   background-color: #000;
-  padding: 0px 0;
+  box-sizing: border-box;
+  position: relative;
 }
 
+/* === Ticker Scroll Content === */
 .ticker-content {
   white-space: nowrap;
   display: inline-block;
-  animation: scroll-left 30s linear infinite;
+  animation: scroll-left 100s linear infinite;
+  padding-left: 100%; /* Start off-screen */
 }
 
-.ticker-content span {
-  font-size: 14px;
+.ticker-item {
+  font-size: 13px;
   font-weight: 500;
-  color: #ffff7b; /* Yellow */
-  padding-left: 100%;
+  color: #ffff7b;
+  margin-right: 50px;
   display: inline-block;
 }
 
+.ticker-item::after {
+  content: ' — ';
+}
+
+/* === Keyframes === */
 @keyframes scroll-left {
   0% {
     transform: translateX(0%);
@@ -67,27 +82,43 @@
   }
 }
 
-/* Responsive */
+/* === Responsive Adjustments === */
 @media screen and (max-width: 768px) {
+  .breaking-label {
+    padding: 8px 10px;
+  }
+
   .breaking-label span {
     font-size: 10px;
   }
 
   .news-text {
-    font-size: 11px;
+    font-size: 10px;
+    padding: 3px 6px;
   }
 
-  .ticker-content span {
+  .ticker-item {
+    font-size: 13px;
+    margin-right: 40px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .breaking-label {
+    padding: 6px 8px;
+  }
+
+  .breaking-label span {
+    font-size: 9px;
+  }
+
+  .news-text {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+
+  .ticker-item {
     font-size: 12px;
+    margin-right: 30px;
   }
 }
-
-.ticker-content a {
-  color: yellow !important;  /* Force yellow */
-  text-decoration: none;
-}
-
-.ticker-content a:hover {
-  text-decoration: underline;
-}
-

@@ -12,18 +12,27 @@ interface BreakingNewsItem {
 const BreakingNewsBar = () => {
   const [newsItems, setNewsItems] = useState<BreakingNewsItem[]>([]);
 
-  useEffect(() => {
-    const fetchBreakingNews = async () => {
-      try {
-        const res = await fetch('/api/breaking-news');
-        const data = await res.json();
-        setNewsItems(data);
-      } catch (error) {
-        console.error('Error fetching breaking news:', error);
-      }
-    };
+  const fetchBreakingNews = async () => {
+    try {
+      const res = await fetch('/api/breaking-news');
+      const data = await res.json();
 
+      if (Array.isArray(data)) {
+        setNewsItems(data);
+      } else {
+        console.error('Breaking news API returned non-array:', data);
+        setNewsItems([]);
+      }
+    } catch (error) {
+      console.error('Error fetching breaking news:', error);
+      setNewsItems([]);
+    }
+  };
+
+  useEffect(() => {
     fetchBreakingNews();
+    const interval = setInterval(fetchBreakingNews, 60000); // refresh every 1 min
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -35,16 +44,9 @@ const BreakingNewsBar = () => {
       <div className="breaking-ticker">
         <div className="ticker-content">
           {newsItems.length > 0 ? (
-            newsItems.map((item, index) => (
-              <span key={item.id}>
-                🟡{' '}
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  dangerouslySetInnerHTML={{ __html: item.title }}
-                ></a>
-                {index < newsItems.length - 1 && ' — '}
+            [...newsItems, ...newsItems, ...newsItems].map((item, index) => (
+              <span key={`${item.id}-${index}`} className="ticker-item">
+                🟡 {item.title} {' — '}
               </span>
             ))
           ) : (

@@ -42,11 +42,41 @@
 
 .video-title {
   padding: 0.5rem 0.75rem;
-  font-size: 16px;
+  font-size: 13px;
   color: #333;
 }
 
 .video-title:hover {
   color:#006400;
   text-decoration: underline; 
+}
+@media (max-width: 768px) {
+  .main-news-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .main-news-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap: 16px !important;
+  }
+
+  .video-card {
+    max-width: 100% !important;
+  }
+
+  .thumbnail {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .video-title {
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-title {
+    font-size: 13px !important;
+  }
 }

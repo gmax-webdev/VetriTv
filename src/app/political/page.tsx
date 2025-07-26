@@ -15,9 +15,10 @@ interface Post {
 function stripHtml(html: string | null) {
   if (!html) return '';
   return html
-    .replace(/style="[^"]*"/g, '')
-    .replace(/<[^>]+>/g, '')
-    .replace(/\s{2,}/g, ' ')
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '') // remove <style> blocks
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // remove <script> blocks
+    .replace(/<[^>]*>?/gm, '') // remove all tags including broken ones
+    .replace(/\s{2,}/g, ' ') // remove multiple spaces
     .trim();
 }
 
