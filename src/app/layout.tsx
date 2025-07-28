@@ -2,7 +2,7 @@
 import '../globals.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Poppins } from 'next/font/google';
-import LayoutWrapper from '../components/LayoutWrapper'; // contains Navbar/Footer
+import LayoutWrapper from '@/components/LayoutWrapper'; // ✅ Make sure this is correct path
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -19,13 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={poppins.className}>
       <body>
-        <div className="site-wrapper">
-          <div className="site-container">
-            <LayoutWrapper>
-              {children}
-            </LayoutWrapper>
-          </div>
-        </div>
+        <LayoutWrapper>
+          {children}
+        </LayoutWrapper>
       </body>
     </html>
   );

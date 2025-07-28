@@ -1,0 +1,46 @@
+.edit-profile-form {
+  max-width: 600px;
+  margin: auto;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.edit-profile-form h2 {
+  margin-bottom: 1rem;
+  font-size: 24px;
+}
+
+.edit-profile-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.edit-profile-form label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: bold;
+}
+
+.edit-profile-form input,
+.edit-profile-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.edit-profile-form small {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.edit-profile-form span {
+  color: red;
+}
+
+.edit-profile-form .message {
+  margin-top: 1rem;
+  font-weight: bold;
+  color: green;
+}

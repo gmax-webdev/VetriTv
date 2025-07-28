@@ -14,12 +14,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <Sidebar />
       </div>
       <main className="admin-main">
-        <button
+        {/* <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="toggle-sidebar"
         >
           ☰
-        </button>
+        </button> */}
         {children}
       </main>
     </div>

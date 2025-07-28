@@ -17,9 +17,13 @@ import EntertainmentNewsSection from '@/components/Homepage/EntertainmentNewsSec
 const LayoutClient = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const isHome = pathname === '/';
+  const isAdmin = pathname.startsWith('/admin');
 
-  return (
-    <body>
+ return (
+  <body>
+    {isAdmin ? (
+      <>{children}</> // no layout at all for admin pages
+    ) : (
       <div className="site-wrapper">
         <div className="site-container">
           <Header />
@@ -30,25 +34,26 @@ const LayoutClient = ({ children }: { children: React.ReactNode }) => {
 
           <main className="page-content">{children}</main>
 
-          {/* ✅ Show only on homepage */}
-        {isHome && (
+          {isHome && (
             <div className="section-divider-top">
-               <YouTubeShorts />
+              <YouTubeShorts />
             </div>
-        )}
+          )}
           {isHome && <LocalAndPoliticalLayout />}
           {isHome && (
             <div className="section-divider-top">
-               <SportsSection />
+              <SportsSection />
             </div>
-        )}
-          {isHome && <CinemaNews/>}
+          )}
+          {isHome && <CinemaNews />}
           {isHome && <EntertainmentNewsSection />}
           <Footer />
         </div>
       </div>
-    </body>
-  );
+    )}
+  </body>
+);
+
 };
 
 export default LayoutClient;

@@ -1,4 +1,12 @@
 /* src/app/admin/admin.css */
+/* Ensure body and html occupy full screen and remove margin */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
 
 .admin-container {
   display: flex;

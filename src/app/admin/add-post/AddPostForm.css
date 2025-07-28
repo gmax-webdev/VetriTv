@@ -263,3 +263,58 @@
   cursor: pointer;
   color: #900f0f;
 }
+
+/* === Publish Box === */
+.publish-box h4 {
+  margin-bottom: 10px;
+}
+
+.publish-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.draft-button,
+.preview-button {
+  background: #f6f7f7;
+  border: 1px solid #ccc;
+  padding: 4px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.publish-meta {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.publish-meta li {
+  margin-bottom: 6px;
+}
+
+.publish-meta a {
+  margin-left: 5px;
+  color: #0073aa;
+  text-decoration: underline;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+.publish-button {
+  width: 100%;
+  background-color: #0073aa;
+  color: white;
+  border: none;
+  padding: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.publish-button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}

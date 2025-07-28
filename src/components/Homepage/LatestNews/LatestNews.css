@@ -42,7 +42,10 @@
   font-size: 13px;    
 
 }
-
+.latest-news-item p:hover {
+  color: #006400;
+  text-decoration: underline;
+}
 .no-image {
   width: 80px;
   height: 80px;

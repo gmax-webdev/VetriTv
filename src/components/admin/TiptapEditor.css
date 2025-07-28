@@ -1,0 +1,11 @@
+.editor-container {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 1rem;
+  min-height: 250px;
+  background: #fff;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
