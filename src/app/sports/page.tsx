@@ -30,7 +30,7 @@ export default async function SportsPage() {
   const { data: posts, error } = await supabase
     .from('posts')
     .select('*')
-    .ilike('category', 'sports')
+    .contains('category', ['Sports'])
     .order('created_at', { ascending: false });
 
   if (error || !posts || posts.length === 0) {

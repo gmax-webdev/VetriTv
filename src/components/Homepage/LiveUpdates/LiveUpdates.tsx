@@ -25,10 +25,13 @@ const LiveUpdates = () => {
         const todayStr = today.toISOString().split('T')[0];
 
         const updates = data
-          .filter(post => {
-            const postDateStr = new Date(post.date).toISOString().split('T')[0];
-            return postDateStr === todayStr;
-          })
+        .filter(post => {
+          if (!post.date) return false; // skip if no date
+          const dateObj = new Date(post.date);
+          if (isNaN(dateObj.getTime())) return false; // skip invalid dates
+          const postDateStr = dateObj.toISOString().split('T')[0];
+          return postDateStr === todayStr;
+        })
           .map(post => ({
             id: post.id,
             timeAgo: getTimeAgo(post.date),

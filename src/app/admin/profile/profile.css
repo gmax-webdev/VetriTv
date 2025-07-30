@@ -1,0 +1,36 @@
+.profile-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-form label {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.profile-form input,
+.profile-form textarea {
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.profile-form button {
+  margin-top: 2rem;
+  padding: 0.75rem;
+  background-color: #900f0f;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.profile-form button:hover {
+  background-color: #750c0c;
+}

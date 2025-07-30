@@ -14,7 +14,7 @@ export default async function SciencePage() {
   const { data: posts, error } = await supabase
     .from('posts')
     .select('id, title, slug, featured_image, created_at')
-    .eq('category', 'Science')
+    .eq('category', ['Science'])
     .order('created_at', { ascending: false });
 
   if (error) {

@@ -31,7 +31,7 @@ export default async function WorldPage() {
   const { data: posts, error } = await supabase
     .from('posts')
     .select('*')
-    .eq('category', 'World News')
+    .contains('category', ['World News'])
     .order('created_at', { ascending: false });
 
   if (error || !posts || posts.length === 0) {

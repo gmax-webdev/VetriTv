@@ -31,7 +31,7 @@ export default async function LocalPage() {
   const { data: posts, error } = await supabase
     .from('posts')
     .select('id, title, slug, featured_image, excerpt')
-    .eq('category', 'உள்நாட்டுச்செய்திகள்')
+    .contains('category', ['உள்நாட்டுச்செய்திகள்'])
     .order('created_at', { ascending: false });
 
   if (error || !posts || posts.length === 0) {

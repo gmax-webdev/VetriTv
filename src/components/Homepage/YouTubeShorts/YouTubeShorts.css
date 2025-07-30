@@ -93,6 +93,7 @@
 }
 .short-title-bottom:hover {
   color: maroon;
+  text-decoration: underline;
 }
 
 .scroll-arrow {

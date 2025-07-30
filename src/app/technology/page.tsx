@@ -13,8 +13,8 @@ interface Post {
 export default async function TechnologyPage() {
   const { data: posts, error } = await supabase
     .from('posts')
-   .select('id, title, slug, featured_image, created_at, category(name)')
-   .eq('category.name', 'technology')
+   .select('id, title, slug, featured_image, created_at, category')
+   .contains('category', ['technology'])
     .order('created_at', { ascending: false });
 
     console.log(posts); 

@@ -14,9 +14,11 @@ interface Post {
 
 const SPORTS_API = '/api/sports-news';
 
-function stripHtml(html: string) {
+function stripHtml(html: string | null | undefined): string {
+  if (!html) return '';
   return html.replace(/<[^>]+>/g, '');
 }
+
 
 const SportsSection = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -28,9 +30,10 @@ const SportsSection = () => {
       .catch((err) => console.error('Error fetching sports posts:', err));
   }, []);
 
-  if (posts.length === 0) return null;
+ if (!Array.isArray(posts) || posts.length === 0) return null;
 
-  const [mainPost, ...sidePosts] = posts;
+ const [mainPost, ...sidePosts] = posts;
+
 
   return (
     <div className="sports-wrapper">

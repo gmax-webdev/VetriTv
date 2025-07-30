@@ -11,7 +11,7 @@ export async function GET() {
     const { data, error } = await supabase
       .from('posts')
       .select('*')
-      .eq('category', 'இலங்கை அரசியல்') // ✅ match your category name
+      .contains('category', ['இலங்கை அரசியல்']) // ✅ match your category name
       .order('created_at', { ascending: false })
       .limit(5);
 

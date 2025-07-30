@@ -9,8 +9,6 @@ const navItems = [
   { name: 'All Posts', path: '/admin/all-posts' },
   { name: 'Add Post', path: '/admin/add-post' },
   { name: 'My Posts', path: '/admin/my-posts' },
-  { name: 'Categories', path: '/admin/categories' },
-  { name: 'Comments', path: '/admin/comments' },
   { name: 'Profile', path: '/admin/profile' },
 ];
 

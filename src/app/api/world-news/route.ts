@@ -8,7 +8,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from('posts')
     .select('*')
-    .eq('category', 'World News')   // Adjust category filter here
+    .contains('category', ['World News'])   // Adjust category filter here
     .order('created_at', { ascending: false })
     .limit(6);
 

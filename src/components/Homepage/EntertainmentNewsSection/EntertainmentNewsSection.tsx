@@ -28,11 +28,11 @@ export default function EntertainmentNewsSection() {
     const { data, error } = await supabase
       .from('posts')
       .select('*')
-      .in('category', ['technology', 'science', 'மருத்துவம்'])
+      .overlaps('category', ['technology', 'science', 'மருத்துவம்'])
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Supabase error:', error);
+      console.error('Supabase error:', JSON.stringify(error, null, 2));
       return;
     }
 
@@ -56,7 +56,7 @@ export default function EntertainmentNewsSection() {
 
   return (
   <section className="entertainment-section">
-    <h2 className="section-title">Entertainment</h2>
+    <h2 className="section-title">More News</h2>
 
     <div className="entertainment-featured-layout">
       {posts.length > 0 && (

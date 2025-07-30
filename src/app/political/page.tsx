@@ -26,7 +26,7 @@ export default async function PoliticalPage() {
   const { data: posts, error } = await supabase
     .from('posts')
     .select('id, title, slug, featured_image, excerpt, created_at')
-    .eq('category', 'இலங்கை அரசியல்')
+    .contains('category', ['இலங்கை அரசியல்'])
     .order('created_at', { ascending: false });
 
   if (error || !posts || posts.length === 0) {

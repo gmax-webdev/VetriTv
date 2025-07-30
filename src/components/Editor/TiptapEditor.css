@@ -1,0 +1,33 @@
+/* src/components/Editor/TiptapEditor.css */
+.tiptap-container {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.toolbar button {
+  padding: 4px 10px;
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.toolbar .active {
+  background-color: #900f0f;
+  color: white;
+  border-color: #900f0f;
+}
+
+.tiptap-editor {
+  min-height: 200px;
+  outline: none;
+  padding: 6px;
+}

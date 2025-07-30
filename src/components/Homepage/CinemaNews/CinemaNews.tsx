@@ -20,14 +20,16 @@ const CinemaNews: React.FC = () => {
       const { data, error } = await supabase
         .from('posts')
         .select('id, title, slug, featured_image')
-        .eq('category', 'சினிமா')
+        .contains('category', ['சினிமா']) // ✅ correct way
         .order('created_at', { ascending: false })
         .limit(4);
 
+
       if (error) {
-        console.error('Cinema fetch error:', error);
+        console.error('Cinema fetch error:', error.message || error);
         return;
       }
+
 
       const validPosts = data.filter(post => post.title && post.featured_image);
       setPosts(validPosts);

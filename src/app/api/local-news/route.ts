@@ -11,7 +11,7 @@ export async function GET() {
     const { data, error } = await supabase
       .from('posts')
       .select('*')
-      .eq('category', 'உள்நாட்டுச்செய்திகள்') // ✅ updated here
+      .contains('category', ['உள்நாட்டுச்செய்திகள்']) // ✅ updated here
       .order('created_at', { ascending: false })
       .limit(5);
 

@@ -2,16 +2,20 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { supabase } from '@/lib/supabaseClient';
 import './AddPostForm.css';
+
+const TiptapEditor = dynamic(() => import('@/components/Editor/TiptapEditor'), { ssr: false });
+
 
 export default function AddPostForm() {
   const router = useRouter();
   const mediaInputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [category, setCategory] = useState('');
+  const [content, setContent] = useState<string>(''); // JSON string
+  const [categories, setCategories] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [tagList, setTagList] = useState<string[]>([]);
   const [featuredImage, setFeaturedImage] = useState<File | null>(null);
@@ -20,24 +24,22 @@ export default function AddPostForm() {
   const [userId, setUserId] = useState<string | null>(null);
   const [author, setAuthor] = useState('');
 
+  // Get logged-in user
+  useEffect(() => {
+    const getUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user) {
+        alert('You must be logged in to add posts');
+        router.push('/admin/login');
+      } else {
+        setUserId(data.user.id);
+        setAuthor(data.user.user_metadata?.full_name || data.user.email || 'Unknown User');
+      }
+    };
+    getUser();
+  }, [router]);
 
- useEffect(() => {
-  const getUser = async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) {
-      alert('You must be logged in to add posts');
-      router.push('/admin/login');
-    } else {
-      setUserId(data.user.id);
-      // NEW: set author name here
-      setAuthor(data.user.user_metadata?.full_name || data.user.email || 'Unknown User');
-    }
-  };
-  getUser();
-}, [router]);
-
-
-  // ✅ Image preview
+  // ✅ Featured Image Upload Preview
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -46,7 +48,7 @@ export default function AddPostForm() {
     }
   };
 
-  // ✅ Upload featured image
+  // ✅ Upload featured image to Supabase
   const handleImageUpload = async (): Promise<string> => {
     if (!featuredImage) return '';
     setUploading(true);
@@ -56,60 +58,24 @@ export default function AddPostForm() {
       const fileName = `featured/${Date.now()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
+      const { error } = await supabase.storage
         .from('posts')
-        .upload(filePath, featuredImage, {
-          cacheControl: '3600',
-          upsert: false,
-        });
+        .upload(filePath, featuredImage, { upsert: false });
 
-      if (uploadError) throw uploadError;
+      if (error) throw error;
 
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from('posts').getPublicUrl(filePath);
-
-      return publicUrl;
+      const { data } = supabase.storage.from('posts').getPublicUrl(filePath);
+      return data.publicUrl;
     } catch (err) {
+      console.error('Image upload error:', err);
       alert('Image upload failed');
-      console.error('Upload Error:', err);
       return '';
     } finally {
       setUploading(false);
     }
   };
 
-  // ✅ Inline media upload
-  const handleMediaImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `inline/${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('posts')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false,
-        });
-
-      if (uploadError) throw uploadError;
-
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from('posts').getPublicUrl(filePath);
-
-      setContent((prev) => `${prev}\n<img src="${publicUrl}" alt="" />`);
-    } catch (err) {
-      alert('Inline image upload failed');
-      console.error(err);
-    }
-  };
-
-  // ✅ Add tag
+  // ✅ Tag Add/Remove
   const handleAddTag = () => {
     const newTag = tagInput.trim();
     if (newTag && !tagList.includes(newTag)) {
@@ -118,12 +84,11 @@ export default function AddPostForm() {
     }
   };
 
-  // ✅ Remove tag
   const removeTag = (tagToRemove: string) => {
     setTagList(tagList.filter((tag) => tag !== tagToRemove));
   };
 
-  // ✅ Submit post
+  // ✅ Submit Post
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setUploading(true);
@@ -136,16 +101,11 @@ export default function AddPostForm() {
 
     const imageUrl = await handleImageUpload();
 
-    const htmlContent = content
-      .split(/\n{2,}/)
-      .map((para) => `<p>${para.trim().replace(/\n/g, '<br />')}</p>`)
-      .join('\n');
-
     const { error } = await supabase.from('posts').insert([
       {
         title,
-        content: htmlContent,
-        category,
+        content: content,
+        category: categories,
         tags: tagList,
         featured_image: imageUrl,
         status: 'published',
@@ -155,8 +115,8 @@ export default function AddPostForm() {
     ]);
 
     if (error) {
-      alert('Failed to publish post');
       console.error(error.message);
+      alert('Failed to publish post');
     } else {
       alert('Post published successfully!');
       router.push('/admin/my-posts');
@@ -188,20 +148,17 @@ export default function AddPostForm() {
               accept="image/*"
               ref={mediaInputRef}
               style={{ display: 'none' }}
-              onChange={handleMediaImageUpload}
+              onChange={(e) => {}}
             />
           </div>
 
+          {/* ✅ Block Editor here */}
           <div className="content-editor">
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Write content here..."
-              rows={12}
-              required
-            />
+              <TiptapEditor content={content} setContent={setContent} />
           </div>
 
+
+          {/* ✅ Featured Image Upload */}
           <div className="featured-image-box">
             <label>Featured Image</label>
             <input type="file" accept="image/*" onChange={handleImageChange} />
@@ -219,20 +176,37 @@ export default function AddPostForm() {
           </div>
 
           <div className="box">
-            <h4>Category</h4>
-            <select value={category} onChange={(e) => setCategory(e.target.value)} required>
-              <option value="">Select Category</option>
-              <option value="உள்நாட்டுச்செய்திகள்">Local News</option>
-              <option value="World News">World News</option>
-              <option value="இலங்கை அரசியல்">Political</option>
-              <option value="உலக அரசியல்">World Political</option>
-              <option value="Sports">Sports</option>
-              <option value="கல்வி">Education</option>
-              <option value="சினிமா">Cinema</option>
-              <option value="Technology">Technology</option>
-              <option value="மருத்துவம்">Medical</option>
-              <option value="Science">Science</option>
-            </select>
+            <h4>Categories</h4>
+            <div className="category-checkboxes">
+              {[
+                'உள்நாட்டுச்செய்திகள்',
+                'World News',
+                'இலங்கை அரசியல்',
+                'உலக அரசியல்',
+                'Sports',
+                'கல்வி',
+                'சினிமா',
+                'Technology',
+                'மருத்துவம்',
+                'Science',
+              ].map((cat) => (
+                <label key={cat} className="category-checkbox">
+                  <input
+                    type="checkbox"
+                    value={cat}
+                    checked={categories.includes(cat)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setCategories((prev) => [...prev, cat]);
+                      } else {
+                        setCategories((prev) => prev.filter((c) => c !== cat));
+                      }
+                    }}
+                  />
+                  {cat}
+                </label>
+              ))}
+            </div>
           </div>
 
           <div className="box">

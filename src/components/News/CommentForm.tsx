@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './CommentForm.css';
+import { supabase } from '@/lib/supabaseClient';
 
 interface CommentFormProps {
   postId: number;
@@ -15,23 +16,31 @@ export default function CommentForm({ postId }: CommentFormProps) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('sending');
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setStatus('sending');
 
-    try {
-      // Replace this with your actual API call to save comment in Supabase or backend
-      // Example: await fetch('/api/comments', { method: 'POST', body: JSON.stringify({...}) })
+  try {
+    const { data, error } = await supabase.from('comments').insert([
+      {
+        post_id: postId,
+        name: form.name,
+        email: form.email,
+        website: form.website,
+        comment: form.comment,
+      },
+    ]);
 
-      // Simulate API delay
-      await new Promise((r) => setTimeout(r, 1000));
+    if (error) throw error;
 
-      setStatus('success');
-      setForm({ name: '', email: '', website: '', comment: '' });
-    } catch (error) {
-      setStatus('error');
-    }
-  };
+    setStatus('success');
+    setForm({ name: '', email: '', website: '', comment: '' }); // Reset form
+  } catch (error) {
+    console.error('Error submitting comment:', error);
+    setStatus('error');
+  }
+};
+
 
   return (
     <div className="comment-form-wrapper">

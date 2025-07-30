@@ -14,7 +14,7 @@ export default async function MedicalPage() {
   const { data: posts, error } = await supabase
     .from('posts')
     .select('id, title, slug, featured_image, created_at')
-    .eq('category', 'மருத்துவம்')
+    .contains('category',['மருத்துவம்'])
     .order('created_at', { ascending: false });
 
   if (error || !posts || posts.length === 0) {

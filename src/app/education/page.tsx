@@ -23,7 +23,7 @@ export default async function EducationPage() {
   const { data: posts, error } = await supabase
     .from('posts')
     .select('*')
-    .eq('category', 'கல்வி')
+    .contains('category', ['கல்வி'])
     .order('created_at', { ascending: false });
 
   if (error || !posts || posts.length === 0) {

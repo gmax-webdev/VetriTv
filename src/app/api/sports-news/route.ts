@@ -5,7 +5,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from('posts')
     .select('*')
-    .ilike('category', 'sports') // ✅ case-insensitive match
+    .contains('category',['Sports']) // ✅ case-insensitive match
     .order('created_at', { ascending: false })
     .limit(5);
   if (error) {

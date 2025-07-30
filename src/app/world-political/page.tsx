@@ -20,7 +20,7 @@ export default async function WorldPoliticalPage() {
   const { data: posts, error } = await supabase
     .from('posts')
     .select('*')
-    .eq('category', 'உலக அரசியல்')
+    .contains('category', ['உலக அரசியல்'])
     .order('created_at', { ascending: false });
 
   if (error || !posts || posts.length === 0) {
