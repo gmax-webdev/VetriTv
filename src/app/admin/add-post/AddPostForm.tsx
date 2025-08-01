@@ -8,13 +8,12 @@ import './AddPostForm.css';
 
 const TiptapEditor = dynamic(() => import('@/components/Editor/TiptapEditor'), { ssr: false });
 
-
 export default function AddPostForm() {
   const router = useRouter();
   const mediaInputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState<string>(''); // JSON string
+  const [content, setContent] = useState<string>('');
   const [categories, setCategories] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [tagList, setTagList] = useState<string[]>([]);
@@ -23,8 +22,9 @@ export default function AddPostForm() {
   const [uploading, setUploading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [author, setAuthor] = useState('');
+  const [postStatus, setPostStatus] = useState<'draft' | 'published'>('draft');
 
-  // Get logged-in user
+  // ✅ Get logged-in user
   useEffect(() => {
     const getUser = async () => {
       const { data, error } = await supabase.auth.getUser();
@@ -39,7 +39,7 @@ export default function AddPostForm() {
     getUser();
   }, [router]);
 
-  // ✅ Featured Image Upload Preview
+  // ✅ Featured Image Preview
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -48,7 +48,7 @@ export default function AddPostForm() {
     }
   };
 
-  // ✅ Upload featured image to Supabase
+  // ✅ Featured Image Upload
   const handleImageUpload = async (): Promise<string> => {
     if (!featuredImage) return '';
     setUploading(true);
@@ -58,24 +58,50 @@ export default function AddPostForm() {
       const fileName = `featured/${Date.now()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      const { error } = await supabase.storage
-        .from('posts')
-        .upload(filePath, featuredImage, { upsert: false });
-
+      const { error } = await supabase.storage.from('posts').upload(filePath, featuredImage);
       if (error) throw error;
 
       const { data } = supabase.storage.from('posts').getPublicUrl(filePath);
       return data.publicUrl;
     } catch (err) {
       console.error('Image upload error:', err);
-      alert('Image upload failed');
       return '';
     } finally {
       setUploading(false);
     }
   };
 
-  // ✅ Tag Add/Remove
+  // ✅ Add Media (multiple images)
+  const handleMediaFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+
+    try {
+      for (const file of Array.from(files)) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `media/${Date.now()}-${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error } = await supabase.storage.from('posts').upload(filePath, file);
+        if (error) throw error;
+
+        const { data } = supabase.storage.from('posts').getPublicUrl(filePath);
+        const imageUrl = data.publicUrl;
+
+        if ((window as any).editor) {
+          (window as any).editor.chain().focus().setImage({ src: imageUrl }).run();
+        }
+      }
+    } catch (err) {
+      console.error('Media upload error:', err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // ✅ Add/Remove Tags
   const handleAddTag = () => {
     const newTag = tagInput.trim();
     if (newTag && !tagList.includes(newTag)) {
@@ -88,9 +114,9 @@ export default function AddPostForm() {
     setTagList(tagList.filter((tag) => tag !== tagToRemove));
   };
 
-  // ✅ Submit Post
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // ✅ Submit post manually (not auto submit)
+  const handleSubmit = async () => {
+    if (uploading) return;
     setUploading(true);
 
     if (!userId) {
@@ -104,21 +130,21 @@ export default function AddPostForm() {
     const { error } = await supabase.from('posts').insert([
       {
         title,
-        content: content,
+        content,
         category: categories,
         tags: tagList,
         featured_image: imageUrl,
-        status: 'published',
+        status: postStatus,
         user_id: userId,
-        author: author,
+        author,
       },
     ]);
 
     if (error) {
       console.error(error.message);
-      alert('Failed to publish post');
+      alert('Failed to save post');
     } else {
-      alert('Post published successfully!');
+      alert(postStatus === 'published' ? 'Post published!' : 'Draft saved!');
       router.push('/admin/my-posts');
     }
 
@@ -126,7 +152,10 @@ export default function AddPostForm() {
   };
 
   return (
-    <form className="add-post-form" onSubmit={handleSubmit}>
+    <form
+      className="add-post-form"
+      onSubmit={(e) => e.preventDefault()} // ✅ Prevents auto-refresh!
+    >
       <div className="post-container">
         {/* LEFT COLUMN */}
         <div className="post-editor">
@@ -139,26 +168,24 @@ export default function AddPostForm() {
             required
           />
 
-          <div className="editor-toolbar">
+          {/* <div className="editor-toolbar">
             <button type="button" onClick={() => mediaInputRef.current?.click()}>
               + Add Media
             </button>
             <input
               type="file"
               accept="image/*"
+              multiple
               ref={mediaInputRef}
               style={{ display: 'none' }}
-              onChange={(e) => {}}
+              onChange={handleMediaFiles}
             />
-          </div>
+          </div> */}
 
-          {/* ✅ Block Editor here */}
           <div className="content-editor">
-              <TiptapEditor content={content} setContent={setContent} />
+            <TiptapEditor content={content} setContent={setContent} />
           </div>
 
-
-          {/* ✅ Featured Image Upload */}
           <div className="featured-image-box">
             <label>Featured Image</label>
             <input type="file" accept="image/*" onChange={handleImageChange} />
@@ -170,8 +197,28 @@ export default function AddPostForm() {
         <div className="post-sidebar">
           <div className="box publish-box">
             <h4>Publish</h4>
-            <button type="submit" className="publish-button" disabled={uploading}>
-              {uploading ? 'Uploading...' : 'Publish'}
+            <button
+              type="button"
+              className="draft-button"
+              disabled={uploading}
+              onClick={() => {
+                setPostStatus('draft');
+                handleSubmit();
+              }}
+            >
+              {uploading ? 'Saving...' : 'Save Draft'}
+            </button>
+
+            <button
+              type="button"
+              className="publish-button"
+              disabled={uploading}
+              onClick={() => {
+                setPostStatus('published');
+                handleSubmit();
+              }}
+            >
+              {uploading ? 'Publishing...' : 'Publish'}
             </button>
           </div>
 
@@ -186,7 +233,7 @@ export default function AddPostForm() {
                 'Sports',
                 'கல்வி',
                 'சினிமா',
-                'Technology',
+                'technology',
                 'மருத்துவம்',
                 'Science',
               ].map((cat) => (

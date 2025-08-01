@@ -1,0 +1,39 @@
+.superadmin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.superadmin-sidebar {
+  width: 220px;
+  background-color: #222;
+  color: white;
+  padding: 1rem;
+}
+
+.superadmin-sidebar h2 {
+  margin-bottom: 1rem;
+}
+
+.superadmin-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.superadmin-sidebar li {
+  margin-bottom: 0.75rem;
+}
+
+.superadmin-sidebar a {
+  color: white;
+  text-decoration: none;
+}
+
+.superadmin-sidebar a:hover {
+  text-decoration: underline;
+}
+
+.superadmin-content {
+  flex: 1;
+  padding: 2rem;
+  background: #f9f9f9;
+}

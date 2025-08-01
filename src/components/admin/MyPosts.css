@@ -1,0 +1,55 @@
+.my-posts-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.welcome-message {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.post-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  background-color: #fff;
+}
+
+.post-card h3 {
+  margin: 0 0 8px;
+}
+
+.post-meta {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.post-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.post-actions button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+.post-actions button:first-child {
+  background-color: #106b01;
+  color: white;
+}
+
+.delete-button {
+  background-color: #900f0f;
+  color: white;
+}

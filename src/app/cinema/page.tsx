@@ -14,7 +14,7 @@ export default async function CinemaPage() {
   const { data: posts, error } = await supabase
     .from('posts')
     .select('id, title, slug, featured_image, created_at')
-    .contains('category', '[சினிமா]')
+    .contains('category', ['சினிமா'])
     .order('created_at', { ascending: false });
 
   if (error || !posts || posts.length === 0) {

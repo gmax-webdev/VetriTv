@@ -2,8 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { supabase } from '@/lib/supabaseClient';
 import './EditPost.css';
+
+// ✅ Load the rich text editor dynamically
+const TiptapEditor = dynamic(() => import('@/components/Editor/TiptapEditor'), { ssr: false });
 
 export default function EditPostPage() {
   const { id } = useParams();
@@ -18,7 +22,7 @@ export default function EditPostPage() {
   const [featuredImage, setFeaturedImage] = useState('');
   const [uploading, setUploading] = useState(false);
 
-  // Fetch post data by ID
+  // ✅ Fetch post by ID
   useEffect(() => {
     const fetchPost = async () => {
       const { data, error } = await supabase
@@ -49,16 +53,15 @@ export default function EditPostPage() {
     if (id) fetchPost();
   }, [id]);
 
-  // Handle image file upload to Supabase Storage
+  // ✅ Handle image upload
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
 
-    // Optional: limit file size (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('File size exceeds 5MB limit.');
+      alert('File size exceeds 5MB.');
       setUploading(false);
       return;
     }
@@ -67,11 +70,8 @@ export default function EditPostPage() {
     const filePath = `featured/${Date.now()}.${fileExt}`;
 
     const { error } = await supabase.storage
-      .from('posts') // bucket name consistent here
-      .upload(filePath, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
+      .from('posts')
+      .upload(filePath, file, { cacheControl: '3600', upsert: false });
 
     if (error) {
       alert('❌ Image upload failed');
@@ -81,12 +81,11 @@ export default function EditPostPage() {
     }
 
     const { data } = supabase.storage.from('posts').getPublicUrl(filePath);
-
     setFeaturedImage(data.publicUrl);
     setUploading(false);
   };
 
-  // Update post data in Supabase
+  // ✅ Update post in Supabase
   const handleUpdate = async () => {
     if (!title.trim()) {
       alert('Title is required');
@@ -136,13 +135,16 @@ export default function EditPostPage() {
       />
 
       <label>Content</label>
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        rows={10}
-      />
+      <div className="content-editor">
+        <TiptapEditor
+          content={content}
+          setContent={setContent}
+          onEditorReady={(editor) => {
+            (window as any).editor = editor;
+          }}
+        />
+      </div>
 
-      {/* Image upload & preview before category & tags */}
       <label>Upload New Featured Image</label>
       <input
         type="file"
