@@ -3,63 +3,155 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import './SuperAdminLogin.css';
 
-export default function SuperAdminSignup() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function SuperAdminLoginPage() {
   const router = useRouter();
 
-  // Redirect if already logged in
+  const [isSignup, setIsSignup] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  // On mount, check if user is already logged in and is super_admin
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        router.push('/superadmin/dashboard');
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getUser();
+      if (data?.user) {
+        // Fetch profile role from 'profiles' table
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', data.user.id)
+          .single();
+
+        if (error) {
+          console.error('Profile fetch error:', error);
+          return;
+        }
+
+        if (profile?.role === 'super_admin') {
+          router.push('/superadmin/dashboard');
+        }
       }
-    });
-  }, []);
+    };
+    checkSession();
+  }, [router]);
 
-  const handleSignup = async () => {
-    // Create user in Supabase Auth
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+  const handleSubmit = async () => {
+    setErrorMsg('');
 
-    if (error) {
-      alert(error.message);
+    if (!email || !password) {
+      setErrorMsg('Email and password are required');
       return;
     }
 
-    // Insert user info with role
-    await supabase.from('users').insert({
-      email,
-      role: 'super_admin',
-    });
+    if (isSignup) {
+      // SIGN UP flow
+      const { data, error } = await supabase.auth.signUp({ email, password });
 
-    // Redirect to dashboard
-    router.push('/superadmin/dashboard');
+      if (error) {
+        setErrorMsg(error.message);
+        return;
+      }
+
+      const user = data.user;
+      if (user) {
+        // Create profile in 'profiles' table with role super_admin
+        const { error: profileError } = await supabase.from('profiles').upsert({
+          id: user.id,
+          email: user.email,
+          role: 'super_admin',
+        });
+
+        if (profileError) {
+          setErrorMsg(profileError.message);
+          return;
+        }
+      }
+
+      alert('Signup successful! Please check your email to confirm before logging in.');
+      setIsSignup(false); // Switch to login mode after signup
+    } else {
+      // LOGIN flow
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        setErrorMsg(error.message);
+        return;
+      }
+
+      const user = data.user;
+      if (!user) {
+        setErrorMsg('Login failed');
+        return;
+      }
+
+      // Fetch user profile role
+      const { data: profile, error: roleError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+      if (roleError) {
+        console.error('Profile fetch error:', roleError);
+        await supabase.auth.signOut();
+        setErrorMsg('Access Denied: Unable to verify user role.');
+        return;
+      }
+
+      if (profile?.role !== 'super_admin') {
+        await supabase.auth.signOut();
+        setErrorMsg('Access Denied: Not a Super Admin');
+        return;
+      }
+
+      // Success! Redirect to dashboard
+      router.push('/superadmin/dashboard');
+    }
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>👑 Super Admin Signup</h1>
-      <input
-        type="email"
-        placeholder="Enter email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={{ display: 'block', marginBottom: '1rem', width: '300px' }}
-      />
-      <input
-        type="password"
-        placeholder="Enter password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ display: 'block', marginBottom: '1rem', width: '300px' }}
-      />
-      <button onClick={handleSignup} style={{ padding: '0.5rem 1rem' }}>
-        Sign Up
-      </button>
+    <div className="superadmin-login-container">
+      <div className="login-box">
+        <h2>{isSignup ? 'Super Admin Sign Up' : 'Super Admin Login'}</h2>
+
+        {errorMsg && <p className="error">{errorMsg}</p>}
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          autoComplete="email"
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          autoComplete={isSignup ? 'new-password' : 'current-password'}
+        />
+
+        <button onClick={handleSubmit}>
+          {isSignup ? 'Sign Up' : 'Login'}
+        </button>
+
+        <p className="toggle-text">
+          {isSignup ? 'Already have an account?' : "Don't have an account?"}{' '}
+          <span
+            onClick={() => {
+              setErrorMsg('');
+              setIsSignup(!isSignup);
+            }}
+            style={{ cursor: 'pointer', color: '#0070f3' }}
+          >
+            {isSignup ? 'Login' : 'Sign Up'}
+          </span>
+        </p>
+      </div>
     </div>
   );
 }

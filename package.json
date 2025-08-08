@@ -17,7 +17,7 @@
     "@mantine/core": "^5.10.5",
     "@mantine/hooks": "^5.10.5",
     "@mantine/rte": "^5.10.5",
-    "@supabase/supabase-js": "^2.50.3",
+    "@supabase/supabase-js": "^2.53.0",
     "@tinymce/tinymce-react": "^6.2.1",
     "@tiptap/extension-bullet-list": "^3.0.7",
     "@tiptap/extension-heading": "^3.0.7",

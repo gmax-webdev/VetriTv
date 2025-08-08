@@ -1,52 +1,107 @@
 .edit-post-container {
-  max-width: 700px;
-  margin: 30px auto;
-  padding: 24px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 32px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .edit-post-container h2 {
-  margin-bottom: 24px;
+  font-size: 28px;
+  font-weight: 600;
   color: #900f0f;
+  margin-bottom: 24px;
+  border-left: 6px solid #900f0f;
+  padding-left: 12px;
 }
 
 .edit-post-container label {
   display: block;
-  margin-top: 16px;
-  font-weight: bold;
+  margin-top: 20px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
 }
 
 .edit-post-container input,
-.edit-post-container textarea {
+.edit-post-container textarea,
+.edit-post-container select {
   width: 100%;
-  margin-top: 6px;
-  padding: 10px;
+  margin-top: 8px;
+  padding: 12px;
+  font-size: 15px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.update-btn {
-  margin-top: 24px;
-  padding: 10px 20px;
-  background-color: #106b01;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+.edit-post-container input:focus,
+.edit-post-container textarea:focus,
+.edit-post-container select:focus {
+  border-color: #106b01;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 107, 1, 0.2);
 }
 
-.update-btn:hover {
-  background-color: #0e5a01;
+.content-editor {
+  margin-top: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.preview-box {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.preview-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 8px;
+  border: 2px solid #eee;
 }
 
 .remove-btn {
-  margin-top: 8px;
-  background: #900f0f;
-  color: white;
-  padding: 6px 12px;
+  margin-top: 10px;
+  background-color: #900f0f;
+  color: #fff;
   border: none;
-  border-radius: 4px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+  background-color: #750b0b;
+}
+
+.update-btn {
+  margin-top: 30px;
+  padding: 12px 24px;
+  background-color: #106b01;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.update-btn:hover {
+  background-color: #0b5500;
+}
+
+.edit-post-container input[type="file"] {
+  padding: 6px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }

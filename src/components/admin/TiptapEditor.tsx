@@ -10,9 +10,10 @@ import './TiptapEditor.css';
 interface Props {
   content: string;
   setContent: (value: string) => void;
+  onEditorReady?: (editor: any) => void; // ✅ Add this line
 }
 
-export default function TiptapEditor({ content, setContent }: Props) {
+export default function TiptapEditor({ content, setContent, onEditorReady }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, Image, Link],
     content,
@@ -21,9 +22,14 @@ export default function TiptapEditor({ content, setContent }: Props) {
 
   useEffect(() => {
     if (editor) {
-      (window as any).editor = editor; // 🟢 Needed for Add Media image injection
+      (window as any).editor = editor; // ✅ Keep this for Add Media image injection
+      if (onEditorReady) {
+        onEditorReady(editor); // ✅ Notify parent if provided
+      }
     }
-  }, [editor]);
+  }, [editor, onEditorReady]);
+
+  if (!editor) return <p>Loading editor...</p>;
 
   return <EditorContent editor={editor} />;
 }

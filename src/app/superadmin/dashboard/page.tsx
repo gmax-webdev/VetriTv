@@ -6,23 +6,37 @@ import { useRouter } from 'next/navigation';
 
 export default function SuperAdminDashboard() {
   const [email, setEmail] = useState('');
+  const [accessDenied, setAccessDenied] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser();
+
       if (!user) {
-        router.push('/superadmin');
+        router.push('/admin/login'); // Not logged in
         return;
       }
+
+      const role = user.user_metadata?.role;
+
+      if (role !== 'admin') {
+        setAccessDenied(true);
+        return;
+      }
+
       setEmail(user.email || '');
     };
 
-    fetchUser();
+    checkAuth();
   }, []);
 
+  if (accessDenied) {
+    return <div style={{ padding: '2rem' }}>❌ Access Denied: Not a Super Admin</div>;
+  }
+
   return (
-    <div>
+    <div style={{ padding: '2rem' }}>
       <h1>Welcome, Super Admin!</h1>
       <p>Logged in as: <strong>{email}</strong></p>
     </div>
