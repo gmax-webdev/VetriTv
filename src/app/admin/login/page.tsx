@@ -1,77 +1,120 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import './LoginForm.css';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [emailOrUsername, setEmailOrUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg('');
-    setLoading(true);
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: emailOrUsername, // or use username mapping logic here
-      password,
+  // 1. Check auth session on mount
+  useEffect(() => {
+    const session = supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        // User already logged in, redirect to dashboard
+        router.replace('/admin/dashboard');
+      }
     });
-    
-    setLoading(false);
+  }, [router]);
 
-    if (error) {
-      setErrorMsg('Invalid credentials. Please try again.');
+  const handleLogin = async () => {
+    setMessage('');
+    if (!email || !password) {
+      setMessage('⚠ Please enter both email and password');
       return;
     }
 
-    // Redirect to admin dashboard
-    router.push('/admin/dashboard');
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        setMessage(`❌ ${error.message}`);
+        setLoading(false);
+        return;
+      }
+
+      if (!data.session) {
+        setMessage('❌ Login failed. No session returned.');
+        setLoading(false);
+        return;
+      }
+
+      setMessage('✅ Login successful! Redirecting...');
+      setTimeout(() => {
+        router.push('/admin/dashboard');
+      }, 1200);
+    } catch (err) {
+      setMessage('❌ Unexpected error occurred');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleLogin}>
-        <h2>NewsUpdater Login</h2>
+    <div style={{
+      maxWidth: 400,
+      margin: '60px auto',
+      padding: 20,
+      border: '1px solid #ccc',
+      borderRadius: 8,
+      fontFamily: 'Arial, sans-serif',
+    }}>
+      <h1 style={{ textAlign: 'center', marginBottom: 20 }}>News Updater Login</h1>
 
-        {errorMsg && <p className="error-message">{errorMsg}</p>}
+      <label style={{ fontWeight: 'bold' }}>Email</label>
+      <input
+        type="email"
+        placeholder="Enter email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        style={{ width: '100%', padding: 8, marginBottom: 15, borderRadius: 4, border: '1px solid #aaa' }}
+        autoComplete="email"
+        disabled={loading}
+      />
 
-        <label htmlFor="email">UserName</label>
-        <input
-          type="text"
-          id="email"
-          value={emailOrUsername}
-          onChange={(e) => setEmailOrUsername(e.target.value)}
-          required
-        />
+      <label style={{ fontWeight: 'bold' }}>Password</label>
+      <input
+        type="password"
+        placeholder="Enter password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        style={{ width: '100%', padding: 8, marginBottom: 20, borderRadius: 4, border: '1px solid #aaa' }}
+        autoComplete="current-password"
+        disabled={loading}
+      />
 
-        <label htmlFor="password">Password</label>
-        <div className="password-wrapper">
-          <input
-            type={showPassword ? 'text' : 'password'}
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
-            className="toggle-password"
-          >
-            {showPassword ? 'Hide' : 'Show'}
-          </button>
-        </div>
+      <button
+        onClick={handleLogin}
+        disabled={loading}
+        style={{
+          width: '100%',
+          padding: '12px',
+          backgroundColor: '#900f0f',
+          color: 'white',
+          fontWeight: 'bold',
+          border: 'none',
+          borderRadius: 5,
+          cursor: loading ? 'not-allowed' : 'pointer',
+          opacity: loading ? 0.6 : 1,
+        }}
+      >
+        {loading ? 'Logging in...' : 'Login'}
+      </button>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
+      {message && (
+        <p style={{ marginTop: 15, color: message.startsWith('❌') ? 'red' : 'green', fontWeight: 'bold' }}>
+          {message}
+        </p>
+      )}
     </div>
   );
 }

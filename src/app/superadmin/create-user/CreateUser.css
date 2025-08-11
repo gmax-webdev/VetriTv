@@ -1,0 +1,52 @@
+.create-user-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff8dc;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #900f0f;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #900f0f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+button:hover {
+  background: #700c0c;
+}
+
+.message {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+}

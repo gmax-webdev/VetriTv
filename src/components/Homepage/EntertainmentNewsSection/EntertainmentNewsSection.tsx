@@ -8,88 +8,116 @@ import './EntertainmentNewsSection.css';
 interface Post {
   id: number;
   title: string;
-  slug: string;
-  excerpt: string;
-  featured_image: string;
+  slug?: string;
+  excerpt?: string;
+  featured_image?: string;
   category: string;
-}
-
-// ✅ Strip unwanted HTML tags from excerpt
-function stripHtml(html: string | null): string {
-  if (!html) return '';
-  return html.replace(/<[^>]*>/g, '');
+  created_at: string;
 }
 
 export default function EntertainmentNewsSection() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
- useEffect(() => {
-  const fetchPosts = async () => {
-    const { data, error } = await supabase
-      .from('posts')
-      .select('*')
-      .overlaps('category', ['technology', 'science', 'மருத்துவம்'])
-      .order('created_at', { ascending: false });
+  useEffect(() => {
+    async function fetchPosts() {
+      setLoading(true);
+      setErrorMsg(null);
 
-    if (error) {
-      console.error('Supabase error:', JSON.stringify(error, null, 2));
-      return;
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .contains('category', ['மருத்துவம்'])   // Filter only medical news
+        .order('created_at', { ascending: false })
+        .limit(7);
+
+      if (error) {
+        console.error('Supabase error:', error);
+        setErrorMsg('Failed to load posts.');
+        setLoading(false);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        setPosts([]);
+        setLoading(false);
+        return;
+      }
+
+      setPosts(data);
+      setLoading(false);
     }
 
-    console.log('Fetched Posts:', data);
+    fetchPosts();
+  }, []);
 
-    // ✅ New logic for different post limits per category
-    const grouped: Post[] = [];
+  if (loading) {
+    return (
+      <section className="entertainment-section">
+        <h2 className="section-title">Entertainment News</h2>
+        <p>Loading posts...</p>
+      </section>
+    );
+  }
 
-    const techPosts = data.filter((p) => p.category === 'technology').slice(0, 3);
-    const medPosts = data.filter((p) => p.category === 'மருத்துவம்').slice(0, 4);
-    const sciPosts = data.filter((p) => p.category === 'science').slice(0, 3);
+  if (errorMsg) {
+    return (
+      <section className="entertainment-section">
+        <h2 className="section-title">Entertainment News</h2>
+        <p style={{ color: 'red' }}>{errorMsg}</p>
+      </section>
+    );
+  }
 
-    grouped.push(...medPosts, ...techPosts, ...sciPosts);
-
-    setPosts(grouped);
-  };
-
-  fetchPosts();
-}, []);
-
+  if (posts.length === 0) {
+    return (
+      <section className="entertainment-section">
+        <h2 className="section-title">Entertainment News</h2>
+        <p>No posts found.</p>
+      </section>
+    );
+  }
 
   return (
-  <section className="entertainment-section">
-    <h2 className="section-title">More News</h2>
+    <section className="entertainment-section">
+      <h2 className="section-title">Entertainment News</h2>
 
-    <div className="entertainment-featured-layout">
-      {posts.length > 0 && (
+      <div className="entertainment-featured-layout">
+        {/* Big card */}
         <div className="large-card">
           <Link href={`/news/${posts[0].id}`}>
             <div className="category-label">{posts[0].category}</div>
-            <img
-              src={posts[0].featured_image}
-              alt={posts[0].title}
-              className="large-thumbnail"
-            />
-            <h3 className="large-title">{posts[0].title.slice(0, 90)}...</h3>
+            {posts[0].featured_image && (
+              <img
+                src={posts[0].featured_image}
+                alt={posts[0].title}
+                className="large-thumbnail"
+              />
+            )}
+            <h3 className="large-title">{posts[0].title?.slice(0, 90)}</h3>
           </Link>
         </div>
-      )}
 
-      <div className="small-cards-grid">
-        {posts.slice(1).map((post) => (
-          <div key={post.id} className="small-card">
-            <Link href={`/news/${post.id}`}>
-              <div className="category-label">{post.category}</div>
-              <img
-                src={post.featured_image}
-                alt={post.title}
-                className="small-thumbnail"
-              />
-              <h3 className="small-title">{post.title.slice(0, 60)}...</h3>
-            </Link>
-          </div>
-        ))}
+        {/* Small cards */}
+        <div className="small-cards-grid">
+          {posts.slice(1).map((post) => (
+            <div key={post.id} className="small-card">
+              <Link href={`/news/${post.id}`}>
+                <div className="category-label">{post.category}</div>
+                {post.featured_image && (
+                  <img
+                    src={post.featured_image}
+                    alt={post.title}
+                    className="small-thumbnail"
+                  />
+                )}
+                <h3 className="small-title">{post.title?.slice(0, 60)}</h3>
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
-
+    </section>
+  );
 }

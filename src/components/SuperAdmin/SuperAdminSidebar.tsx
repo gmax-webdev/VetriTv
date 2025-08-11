@@ -10,8 +10,9 @@ export default function SuperAdminSidebar() {
       <nav>
         <ul>
           <li><Link href="/superadmin/dashboard">Dashboard</Link></li>
-          <li><Link href="/superadmin/posts">Manage Posts</Link></li>
-          <li><Link href="/superadmin/users">Users</Link></li>
+          <li><Link href="/superadmin/all-post">AllPosts</Link></li>
+          <li><Link href="/superadmin/add-post">Addpost</Link></li>
+          <li><Link href="/superadmin/create-user">AddUser</Link></li>
           <li><Link href="/superadmin/settings">Settings</Link></li>
           <li><button onClick={() => logout()}>Logout</button></li>
         </ul>
